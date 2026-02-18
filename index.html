@@ -3,58 +3,193 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>t.best TikTok Clone</title>
-  <link rel="stylesheet" href="style.css">
+  <title>Mini TikTok</title>
+  <style>
+    /* Reset */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      display: flex;
+      min-height: 100vh;
+      background-color: #000;
+      color: #fff;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: 80px;
+      background-color: #111;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px 0;
+    }
+
+    .sidebar a {
+      color: #fff;
+      margin: 20px 0;
+      text-decoration: none;
+      font-size: 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* Main content */
+    .main {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px;
+    }
+
+    /* Video Card */
+    .video-card {
+      position: relative;
+      margin-bottom: 30px;
+      background-color: #222;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .video-card video {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .video-info {
+      position: absolute;
+      bottom: 10px;
+      left: 10px;
+      color: #fff;
+    }
+
+    .video-info h4 {
+      margin-bottom: 5px;
+    }
+
+    .video-actions {
+      position: absolute;
+      right: 10px;
+      bottom: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      text-align: center;
+    }
+
+    .video-actions div {
+      cursor: pointer;
+    }
+
+    /* Footer (mobile nav) */
+    .footer {
+      display: none;
+    }
+
+    /* Header */
+    .header {
+      width: 100%;
+      padding: 10px 20px;
+      background-color: #111;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .header input {
+      flex: 1;
+      padding: 8px 10px;
+      border-radius: 20px;
+      border: none;
+      outline: none;
+    }
+
+    .header h1 {
+      font-size: 24px;
+      color: #fff;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .sidebar {
+        display: none;
+      }
+      .footer {
+        display: flex;
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+        background-color: #111;
+        justify-content: space-around;
+        padding: 10px 0;
+      }
+      .footer a {
+        color: #fff;
+        text-decoration: none;
+        font-size: 24px;
+      }
+    }
+  </style>
 </head>
 <body>
-  <div class="app">
-
-    <!-- Video feed -->
-    <div class="video-feed">
-
-      <!-- Video item 1 -->
-      <div class="video-item" data-id="1">
-        <video src="videos/video1.mp4" loop muted autoplay></video>
-
-        <div class="video-info">
-          <h3>@creator_one <span class="verified">✔</span></h3>
-          <p>Check out this cool video! 🎬</p>
-        </div>
-
-        <div class="actions">
-          <div class="action like" onclick="likeVideo(1)">❤️ <span class="count" id="likes-1">0</span></div>
-          <div class="action comment" onclick="addComment(1)">💬</div>
-          <div class="action follow" onclick="followUser('creator_one')">➕ Follow</div>
-        </div>
-      </div>
-
-      <!-- Video item 2 -->
-      <div class="video-item" data-id="2">
-        <video src="videos/video2.mp4" loop muted autoplay></video>
-
-        <div class="video-info">
-          <h3>@creator_two <span class="verified">✔</span></h3>
-          <p>This is another amazing clip! 🔥</p>
-        </div>
-
-        <div class="actions">
-          <div class="action like" onclick="likeVideo(2)">❤️ <span class="count" id="likes-2">0</span></div>
-          <div class="action comment" onclick="addComment(2)">💬</div>
-          <div class="action follow" onclick="followUser('creator_two')">➕ Follow</div>
-        </div>
-      </div>
-
-      <!-- Monetization / Ad placeholder -->
-      <div class="video-item ad">
-        <p>💰 Sponsored Ad • Support Creators • t.best</p>
-      </div>
-
-      <!-- Repeat video-items or ads as needed -->
-
-    </div>
-
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <a href="#">🏠<span style="font-size:12px;">Home</span></a>
+    <a href="#">🔍<span style="font-size:12px;">Discover</span></a>
+    <a href="#">💌<span style="font-size:12px;">Inbox</span></a>
+    <a href="#">👤<span style="font-size:12px;">Profile</span></a>
   </div>
 
-  <script src="script.js"></script>
+  <!-- Main content -->
+  <div class="main">
+    <div class="header">
+      <h1>Mini TikTok</h1>
+      <input type="text" placeholder="Search...">
+    </div>
+
+    <!-- Video feed -->
+    <div class="video-card">
+      <video src="https://www.w3schools.com/html/mov_bbb.mp4" controls autoplay loop muted></video>
+      <div class="video-info">
+        <h4>@username</h4>
+        <p>Check out this amazing video! 🎵 #fun #dance</p>
+      </div>
+      <div class="video-actions">
+        <div>❤️ 123</div>
+        <div>💬 45</div>
+        <div>🔗 10</div>
+      </div>
+    </div>
+
+    <div class="video-card">
+      <video src="https://www.w3schools.com/html/movie.mp4" controls autoplay loop muted></video>
+      <div class="video-info">
+        <h4>@anotheruser</h4>
+        <p>Another cool clip! 😎 #trending</p>
+      </div>
+      <div class="video-actions">
+        <div>❤️ 98</div>
+        <div>💬 12</div>
+        <div>🔗 5</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer for mobile -->
+  <div class="footer">
+    <a href="#">🏠</a>
+    <a href="#">🔍</a>
+    <a href="#">💌</a>
+    <a href="#">👤</a>
+  </div>
 </body>
 </html>
