@@ -1,200 +1,60 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>t.best — Watch. Create. Trend.</title>
-
-<style>
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: Arial, Helvetica, sans-serif;
-}
-
-body {
-  background: black;
-  color: white;
-  overflow: hidden;
-}
-
-/* Top Bar */
-.top-bar {
-  position: fixed;
-  top: 15px;
-  width: 100%;
-  text-align: center;
-  z-index: 10;
-  font-weight: bold;
-}
-
-.top-bar span {
-  margin: 0 15px;
-  opacity: 0.6;
-}
-
-.top-bar .active {
-  opacity: 1;
-}
-
-/* Video Feed */
-.feed {
-  height: 100vh;
-  overflow-y: scroll;
-  scroll-snap-type: y mandatory;
-}
-
-.video {
-  height: 100vh;
-  position: relative;
-  scroll-snap-align: start;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #111;
-}
-
-/* Fake video placeholder */
-.video::before {
-  content: "VIDEO";
-  font-size: 2em;
-  opacity: 0.3;
-}
-
-/* Right Actions */
-.actions {
-  position: absolute;
-  right: 15px;
-  bottom: 120px;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  align-items: center;
-}
-
-.action {
-  text-align: center;
-  font-size: 1.5em;
-  cursor: pointer;
-}
-
-.action span {
-  font-size: 0.7em;
-  display: block;
-  margin-top: 4px;
-}
-
-/* Bottom Info */
-.info {
-  position: absolute;
-  bottom: 60px;
-  left: 15px;
-  max-width: 70%;
-}
-
-.info .user {
-  font-weight: bold;
-  margin-bottom: 5px;
-}
-
-.info .music {
-  font-size: 0.85em;
-  opacity: 0.8;
-  margin-top: 6px;
-}
-
-/* Bottom Nav */
-.nav {
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-  height: 55px;
-  background: black;
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  border-top: 1px solid #222;
-}
-
-.nav div {
-  font-size: 1.4em;
-  opacity: 0.7;
-}
-
-.nav .add {
-  background: white;
-  color: black;
-  padding: 5px 14px;
-  border-radius: 8px;
-  font-weight: bold;
-  opacity: 1;
-}
-
-/* Owner watermark */
-.watermark {
-  position: fixed;
-  top: 10px;
-  left: 10px;
-  font-size: 0.7em;
-  opacity: 0.4;
-}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>t.best TikTok Clone</title>
+  <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
+  <div class="app">
 
-<div class="watermark">
-t.best social network • Omotayo Fanegan
-</div>
+    <!-- Video feed -->
+    <div class="video-feed">
 
-<div class="top-bar">
-  <span>Following</span>
-  <span class="active">For You</span>
-</div>
+      <!-- Video item 1 -->
+      <div class="video-item" data-id="1">
+        <video src="videos/video1.mp4" loop muted autoplay></video>
 
-<div class="feed">
+        <div class="video-info">
+          <h3>@creator_one <span class="verified">✔</span></h3>
+          <p>Check out this cool video! 🎬</p>
+        </div>
 
-  <div class="video">
-    <div class="info">
-      <div class="user">@chioma_music</div>
-      <div>New single out now 🔥🔥</div>
-      <div class="music">🎵 Chioma – Summer Vibes</div>
+        <div class="actions">
+          <div class="action like" onclick="likeVideo(1)">❤️ <span class="count" id="likes-1">0</span></div>
+          <div class="action comment" onclick="addComment(1)">💬</div>
+          <div class="action follow" onclick="followUser('creator_one')">➕ Follow</div>
+        </div>
+      </div>
+
+      <!-- Video item 2 -->
+      <div class="video-item" data-id="2">
+        <video src="videos/video2.mp4" loop muted autoplay></video>
+
+        <div class="video-info">
+          <h3>@creator_two <span class="verified">✔</span></h3>
+          <p>This is another amazing clip! 🔥</p>
+        </div>
+
+        <div class="actions">
+          <div class="action like" onclick="likeVideo(2)">❤️ <span class="count" id="likes-2">0</span></div>
+          <div class="action comment" onclick="addComment(2)">💬</div>
+          <div class="action follow" onclick="followUser('creator_two')">➕ Follow</div>
+        </div>
+      </div>
+
+      <!-- Monetization / Ad placeholder -->
+      <div class="video-item ad">
+        <p>💰 Sponsored Ad • Support Creators • t.best</p>
+      </div>
+
+      <!-- Repeat video-items or ads as needed -->
+
     </div>
 
-    <div class="actions">
-      <div class="action">❤️<span>12.5K</span></div>
-      <div class="action">💬<span>846</span></div>
-      <div class="action">🔄<span>2.1K</span></div>
-      <div class="action">🔖</div>
-    </div>
   </div>
 
-  <div class="video">
-    <div class="info">
-      <div class="user">@dancecrew</div>
-      <div>Can you do this move? 🕺</div>
-      <div class="music">🎵 Viral Dance Beat</div>
-    </div>
-
-    <div class="actions">
-      <div class="action">❤️<span>45K</span></div>
-      <div class="action">💬<span>3.2K</span></div>
-      <div class="action">🔄<span>8.9K</span></div>
-      <div class="action">🔖</div>
-    </div>
-  </div>
-
-</div>
-
-<div class="nav">
-  <div>🏠</div>
-  <div>🔍</div>
-  <div class="add">＋</div>
-  <div>💬</div>
-  <div>👤</div>
-</div>
-
+  <script src="script.js"></script>
 </body>
 </html>
