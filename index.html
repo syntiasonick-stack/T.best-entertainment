@@ -1,1399 +1,185 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SocialVerse - Connect, Share, Discover</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        
-        :root {
-            --primary: #ff0050;
-            --secondary: #00f2ea;
-            --dark: #121212;
-            --light: #ffffff;
-            --gray: #f0f2f5;
-            --text-dark: #1c1e21;
-            --text-gray: #65676b;
-        }
-        
-        body {
-            background: var(--dark);
-            color: var(--light);
-            overflow-x: hidden;
-        }
-        
-        /* Login/Register Modal */
-        .auth-modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 10000;
-            transition: opacity 0.5s;
-        }
-        
-        .auth-container {
-            background: white;
-            padding: 40px;
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-            width: 90%;
-            max-width: 450px;
-            text-align: center;
-            animation: slideUp 0.5s ease;
-        }
-        
-        @keyframes slideUp {
-            from { transform: translateY(50px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
-        
-        .auth-logo {
-            font-size: 2.5em;
-            font-weight: bold;
-            background: linear-gradient(45deg, var(--primary), var(--secondary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 10px;
-        }
-        
-        .auth-tabs {
-            display: flex;
-            margin-bottom: 30px;
-            border-bottom: 2px solid #eee;
-        }
-        
-        .auth-tab {
-            flex: 1;
-            padding: 15px;
-            cursor: pointer;
-            font-weight: 600;
-            color: #999;
-            transition: all 0.3s;
-        }
-        
-        .auth-tab.active {
-            color: var(--primary);
-            border-bottom: 3px solid var(--primary);
-        }
-        
-        .auth-form {
-            display: none;
-        }
-        
-        .auth-form.active {
-            display: block;
-            animation: fadeIn 0.3s;
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-        
-        .input-group {
-            margin-bottom: 20px;
-            text-align: left;
-        }
-        
-        .input-group label {
-            display: block;
-            margin-bottom: 8px;
-            color: #333;
-            font-weight: 600;
-            font-size: 0.9em;
-        }
-        
-        .input-group input {
-            width: 100%;
-            padding: 15px;
-            border: 2px solid #e0e0e0;
-            border-radius: 10px;
-            font-size: 1em;
-            transition: border-color 0.3s;
-        }
-        
-        .input-group input:focus {
-            outline: none;
-            border-color: var(--primary);
-        }
-        
-        .btn {
-            width: 100%;
-            padding: 15px;
-            border: none;
-            border-radius: 10px;
-            font-size: 1.1em;
-            font-weight: 600;
-            cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-        
-        .btn-primary {
-            background: linear-gradient(45deg, var(--primary), #ff4081);
-            color: white;
-            margin-bottom: 15px;
-        }
-        
-        .btn-google {
-            background: white;
-            color: #333;
-            border: 2px solid #ddd;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-        }
-        
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
-        }
-        
-        .divider {
-            margin: 20px 0;
-            position: relative;
-            color: #999;
-        }
-        
-        .divider::before,
-        .divider::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            width: 40%;
-            height: 1px;
-            background: #ddd;
-        }
-        
-        .divider::before { left: 0; }
-        .divider::after { right: 0; }
-        
-        /* Main App Layout */
-        .app-container {
-            display: none;
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-        
-        .app-container.active {
-            display: grid;
-            grid-template-columns: 300px 1fr 350px;
-            min-height: 100vh;
-        }
-        
-        /* Left Sidebar */
-        .sidebar-left {
-            background: var(--dark);
-            border-right: 1px solid #333;
-            padding: 20px;
-            position: fixed;
-            height: 100vh;
-            width: 300px;
-            overflow-y: auto;
-        }
-        
-        .logo {
-            font-size: 1.8em;
-            font-weight: bold;
-            background: linear-gradient(45deg, var(--primary), var(--secondary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 30px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .nav-menu {
-            list-style: none;
-        }
-        
-        .nav-item {
-            padding: 15px;
-            margin-bottom: 5px;
-            border-radius: 10px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            transition: all 0.3s;
-            color: #b0b3b8;
-        }
-        
-        .nav-item:hover,
-        .nav-item.active {
-            background: rgba(255,255,255,0.1);
-            color: var(--light);
-        }
-        
-        .nav-item i {
-            font-size: 1.3em;
-            width: 30px;
-        }
-        
-        .user-profile-mini {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 15px;
-            margin-top: 20px;
-            border-top: 1px solid #333;
-        }
-        
-        .user-avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: linear-gradient(45deg, var(--primary), var(--secondary));
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-        }
-        
-        /* Main Feed */
-        .main-content {
-            margin-left: 300px;
-            margin-right: 350px;
-            padding: 20px;
-        }
-        
-        .stories-container {
-            display: flex;
-            gap: 15px;
-            margin-bottom: 30px;
-            overflow-x: auto;
-            padding: 10px 0;
-        }
-        
-        .story {
-            min-width: 100px;
-            height: 180px;
-            border-radius: 15px;
-            background: linear-gradient(45deg, #667eea, #764ba2);
-            position: relative;
-            cursor: pointer;
-            overflow: hidden;
-            border: 3px solid transparent;
-            transition: transform 0.3s;
-        }
-        
-        .story:hover {
-            transform: scale(1.05);
-        }
-        
-        .story.unseen {
-            border-color: var(--primary);
-        }
-        
-        .story-avatar {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            border: 3px solid var(--primary);
-            background: #333;
-        }
-        
-        .story-name {
-            position: absolute;
-            bottom: 10px;
-            left: 10px;
-            font-size: 0.9em;
-            font-weight: 600;
-        }
-        
-        .create-post {
-            background: #242526;
-            border-radius: 15px;
-            padding: 20px;
-            margin-bottom: 25px;
-        }
-        
-        .create-post-header {
-            display: flex;
-            gap: 15px;
-            margin-bottom: 15px;
-        }
-        
-        .create-post input {
-            flex: 1;
-            background: #3a3b3c;
-            border: none;
-            border-radius: 25px;
-            padding: 12px 20px;
-            color: white;
-            font-size: 1em;
-        }
-        
-        .create-post-actions {
-            display: flex;
-            justify-content: space-around;
-            border-top: 1px solid #3a3b3c;
-            padding-top: 15px;
-        }
-        
-        .post-action {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            color: #b0b3b8;
-            cursor: pointer;
-            padding: 8px 20px;
-            border-radius: 8px;
-            transition: background 0.3s;
-        }
-        
-        .post-action:hover {
-            background: rgba(255,255,255,0.1);
-        }
-        
-        .post-action i {
-            font-size: 1.2em;
-        }
-        
-        .post-action.video i { color: #f3425f; }
-        .post-action.photo i { color: #45bd62; }
-        .post-action.music i { color: #f7b928; }
-        
-        /* Feed Posts */
-        .feed-post {
-            background: #242526;
-            border-radius: 15px;
-            margin-bottom: 25px;
-            overflow: hidden;
-        }
-        
-        .post-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 20px;
-        }
-        
-        .post-user {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-        
-        .post-user-avatar {
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            background: linear-gradient(45deg, var(--primary), var(--secondary));
-        }
-        
-        .post-user-info h4 {
-            color: white;
-            margin-bottom: 3px;
-        }
-        
-        .post-user-info span {
-            color: #b0b3b8;
-            font-size: 0.85em;
-        }
-        
-        .post-content {
-            padding: 0 20px 15px;
-            color: #e4e6eb;
-            line-height: 1.5;
-        }
-        
-        .post-media {
-            width: 100%;
-            max-height: 600px;
-            object-fit: cover;
-            background: #000;
-        }
-        
-        .video-container {
-            position: relative;
-            background: #000;
-            min-height: 500px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .video-placeholder {
-            text-align: center;
-            color: #666;
-        }
-        
-        .video-placeholder i {
-            font-size: 4em;
-            margin-bottom: 20px;
-            color: var(--primary);
-        }
-        
-        .video-actions-overlay {
-            position: absolute;
-            right: 20px;
-            bottom: 100px;
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-        
-        .video-action-btn {
-            background: rgba(255,255,255,0.1);
-            border: none;
-            color: white;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.3em;
-            transition: all 0.3s;
-            backdrop-filter: blur(10px);
-        }
-        
-        .video-action-btn:hover {
-            background: rgba(255,255,255,0.2);
-            transform: scale(1.1);
-        }
-        
-        .video-action-btn.liked {
-            color: var(--primary);
-        }
-        
-        .post-stats {
-            display: flex;
-            justify-content: space-between;
-            padding: 15px 20px;
-            border-bottom: 1px solid #3a3b3c;
-            color: #b0b3b8;
-            font-size: 0.9em;
-        }
-        
-        .post-buttons {
-            display: flex;
-            justify-content: space-around;
-            padding: 10px;
-        }
-        
-        .post-btn {
-            flex: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            padding: 12px;
-            color: #b0b3b8;
-            cursor: pointer;
-            border-radius: 8px;
-            transition: background 0.3s;
-            font-weight: 600;
-        }
-        
-        .post-btn:hover {
-            background: rgba(255,255,255,0.1);
-        }
-        
-        .post-btn.liked {
-            color: var(--primary);
-        }
-        
-        /* Right Sidebar */
-        .sidebar-right {
-            position: fixed;
-            right: 0;
-            top: 0;
-            width: 350px;
-            height: 100vh;
-            background: var(--dark);
-            border-left: 1px solid #333;
-            padding: 20px;
-            overflow-y: auto;
-        }
-        
-        .section-title {
-            font-size: 1.1em;
-            color: #b0b3b8;
-            margin-bottom: 20px;
-            font-weight: 600;
-        }
-        
-        .trending-item,
-        .contact-item {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 12px;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: background 0.3s;
-            margin-bottom: 5px;
-        }
-        
-        .trending-item:hover,
-        .contact-item:hover {
-            background: rgba(255,255,255,0.05);
-        }
-        
-        .trending-rank {
-            font-size: 1.5em;
-            font-weight: bold;
-            color: var(--primary);
-            width: 30px;
-        }
-        
-        .trending-info h4 {
-            color: white;
-            margin-bottom: 3px;
-            font-size: 0.95em;
-        }
-        
-        .trending-info span {
-            color: #b0b3b8;
-            font-size: 0.85em;
-        }
-        
-        .online-indicator {
-            width: 10px;
-            height: 10px;
-            background: #31a24c;
-            border-radius: 50%;
-            position: absolute;
-            bottom: 2px;
-            right: 2px;
-            border: 2px solid var(--dark);
-        }
-        
-        .contact-avatar {
-            position: relative;
-        }
-        
-        .music-player {
-            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-            border-radius: 15px;
-            padding: 20px;
-            margin-top: 30px;
-        }
-        
-        .music-info {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 15px;
-        }
-        
-        .music-cover {
-            width: 60px;
-            height: 60px;
-            border-radius: 10px;
-            background: linear-gradient(45deg, var(--primary), var(--secondary));
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5em;
-        }
-        
-        .music-details h4 {
-            color: white;
-            margin-bottom: 5px;
-        }
-        
-        .music-details span {
-            color: rgba(255,255,255,0.7);
-            font-size: 0.9em;
-        }
-        
-        .music-controls {
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-        }
-        
-        .music-btn {
-            background: none;
-            border: none;
-            color: white;
-            font-size: 1.3em;
-            cursor: pointer;
-            padding: 10px;
-            border-radius: 50%;
-            transition: background 0.3s;
-        }
-        
-        .music-btn:hover {
-            background: rgba(255,255,255,0.1);
-        }
-        
-        .music-btn.play {
-            width: 50px;
-            height: 50px;
-            background: white;
-            color: #2a5298;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        /* Chat Modal */
-        .chat-modal {
-            position: fixed;
-            bottom: 0;
-            right: 380px;
-            width: 350px;
-            height: 450px;
-            background: #242526;
-            border-radius: 15px 15px 0 0;
-            box-shadow: 0 -5px 20px rgba(0,0,0,0.3);
-            display: none;
-            flex-direction: column;
-            z-index: 1000;
-        }
-        
-        .chat-modal.active {
-            display: flex;
-        }
-        
-        .chat-header {
-            padding: 15px;
-            border-bottom: 1px solid #3a3b3c;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .chat-user {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .chat-messages {
-            flex: 1;
-            overflow-y: auto;
-            padding: 15px;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-        
-        .message {
-            max-width: 70%;
-            padding: 10px 15px;
-            border-radius: 18px;
-            font-size: 0.95em;
-        }
-        
-        .message.sent {
-            align-self: flex-end;
-            background: var(--primary);
-            color: white;
-            border-bottom-right-radius: 5px;
-        }
-        
-        .message.received {
-            align-self: flex-start;
-            background: #3a3b3c;
-            color: white;
-            border-bottom-left-radius: 5px;
-        }
-        
-        .chat-input {
-            padding: 15px;
-            border-top: 1px solid #3a3b3c;
-            display: flex;
-            gap: 10px;
-        }
-        
-        .chat-input input {
-            flex: 1;
-            background: #3a3b3c;
-            border: none;
-            border-radius: 20px;
-            padding: 12px 20px;
-            color: white;
-        }
-        
-        .chat-input button {
-            background: var(--primary);
-            border: none;
-            color: white;
-            width: 40px;
-            border-radius: 50%;
-            cursor: pointer;
-        }
-        
-        /* Mobile Responsive */
-        @media (max-width: 1200px) {
-            .app-container.active {
-                grid-template-columns: 80px 1fr;
-            }
-            .sidebar-left {
-                width: 80px;
-                padding: 10px;
-            }
-            .logo span, .nav-item span, .user-profile-mini .user-info {
-                display: none;
-            }
-            .main-content {
-                margin-left: 80px;
-                margin-right: 0;
-            }
-            .sidebar-right {
-                display: none;
-            }
-        }
-        
-        @media (max-width: 768px) {
-            .app-container.active {
-                display: block;
-            }
-            .sidebar-left {
-                bottom: 0;
-                top: auto;
-                height: 60px;
-                width: 100%;
-                border-right: none;
-                border-top: 1px solid #333;
-                display: flex;
-                justify-content: space-around;
-                align-items: center;
-                padding: 0;
-                z-index: 100;
-            }
-            .nav-menu {
-                display: flex;
-                width: 100%;
-                justify-content: space-around;
-            }
-            .nav-item {
-                margin: 0;
-                padding: 10px;
-            }
-            .nav-item span {
-                display: none;
-            }
-            .main-content {
-                margin-left: 0;
-                margin-bottom: 60px;
-                padding: 10px;
-            }
-            .logo, .user-profile-mini {
-                display: none;
-            }
-        }
-        
-        /* Animations */
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-        }
-        
-        .live-badge {
-            background: red;
-            color: white;
-            padding: 2px 8px;
-            border-radius: 4px;
-            font-size: 0.75em;
-            font-weight: bold;
-            animation: pulse 2s infinite;
-        }
-        
-        .notification-badge {
-            position: absolute;
-            top: -5px;
-            right: -5px;
-            background: var(--primary);
-            color: white;
-            border-radius: 50%;
-            width: 20px;
-            height: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.75em;
-            font-weight: bold;
-        }
-    </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<title>t.best social network — Connect. Create. Trend.</title>
+
+<meta name="description" content="t.best social network is a modern social platform to connect, share moments, watch videos, chat and trend globally." />
+<meta name="author" content="Omotayo Fanegan" />
+<meta name="keywords" content="social network, videos, chat, music, trends, nigeria social media" />
+
+<link rel="icon" href="favicon.ico" />
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+
+<style>
+:root {
+    --primary:#ff0050;
+    --secondary:#00f2ea;
+    --dark:#121212;
+    --card:#242526;
+    --text:#e4e6eb;
+    --muted:#b0b3b8;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; font-family:Segoe UI,Tahoma; }
+
+body { background:var(--dark); color:var(--text); }
+
+/* ===== AUTH ===== */
+.auth {
+    position:fixed; inset:0;
+    display:flex; align-items:center; justify-content:center;
+    background:linear-gradient(135deg,#667eea,#764ba2);
+    z-index:9999;
+}
+
+.auth-box {
+    background:#fff; color:#222;
+    width:420px; max-width:90%;
+    padding:35px; border-radius:18px;
+    text-align:center;
+}
+
+.auth-logo {
+    font-size:2.3em;
+    font-weight:800;
+    background:linear-gradient(45deg,var(--primary),var(--secondary));
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+}
+
+.auth-box input {
+    width:100%; padding:14px;
+    margin:12px 0;
+    border-radius:10px;
+    border:2px solid #ddd;
+}
+
+.auth-box button {
+    width:100%;
+    padding:14px;
+    background:linear-gradient(45deg,var(--primary),#ff4081);
+    border:none; border-radius:10px;
+    color:#fff; font-weight:700;
+    cursor:pointer;
+}
+
+/* ===== APP ===== */
+.app { display:none; }
+
+.app.active {
+    display:grid;
+    grid-template-columns:260px 1fr 320px;
+    min-height:100vh;
+}
+
+/* SIDEBAR */
+.sidebar {
+    padding:20px;
+    border-right:1px solid #333;
+}
+
+.brand {
+    font-size:1.6em;
+    font-weight:800;
+    margin-bottom:25px;
+}
+
+.nav div {
+    padding:14px;
+    border-radius:10px;
+    cursor:pointer;
+    color:var(--muted);
+}
+.nav div:hover { background:#333; color:#fff; }
+
+/* FEED */
+.feed { padding:20px; }
+
+.card {
+    background:var(--card);
+    border-radius:15px;
+    padding:18px;
+    margin-bottom:22px;
+}
+
+/* RIGHT */
+.right {
+    padding:20px;
+    border-left:1px solid #333;
+}
+
+/* FOOTER */
+footer {
+    text-align:center;
+    padding:20px;
+    font-size:.85em;
+    color:var(--muted);
+}
+</style>
 </head>
+
 <body>
-    <!-- Authentication Modal -->
-    <div class="auth-modal" id="authModal">
-        <div class="auth-container">
-            <div class="auth-logo">
-                <i class="fas fa-globe"></i> SocialVerse
-            </div>
-            <p style="color: #666; margin-bottom: 30px;">Connect with friends, share moments, discover trends</p>
-            
-            <div class="auth-tabs">
-                <div class="auth-tab active" onclick="switchTab('login')">Login</div>
-                <div class="auth-tab" onclick="switchTab('register')">Create Account</div>
-            </div>
-            
-            <!-- Login Form -->
-            <form class="auth-form active" id="loginForm">
-                <div class="input-group">
-                    <label>Email or Username</label>
-                    <input type="text" placeholder="Enter your email or username" required>
-                </div>
-                <div class="input-group">
-                    <label>Password</label>
-                    <input type="password" placeholder="Enter your password" required>
-                </div>
-                <button type="button" class="btn btn-primary" onclick="login()">
-                    <i class="fas fa-sign-in-alt"></i> Login
-                </button>
-                
-                <div class="divider">or continue with</div>
-                
-                <button type="button" class="btn btn-google" onclick="googleLogin()">
-                    <i class="fab fa-google" style="color: #4285f4;"></i>
-                    Sign in with Google
-                </button>
-            </form>
-            
-            <!-- Register Form -->
-            <form class="auth-form" id="registerForm">
-                <div class="input-group">
-                    <label>Full Name</label>
-                    <input type="text" placeholder="Enter your full name" required>
-                </div>
-                <div class="input-group">
-                    <label>Username</label>
-                    <input type="text" placeholder="Choose a username" required>
-                </div>
-                <div class="input-group">
-                    <label>Email</label>
-                    <input type="email" placeholder="Enter your email" required>
-                </div>
-                <div class="input-group">
-                    <label>Password</label>
-                    <input type="password" placeholder="Create a password" required>
-                </div>
-                <button type="button" class="btn btn-primary" onclick="register()">
-                    <i class="fas fa-user-plus"></i> Create Account
-                </button>
-                
-                <div class="divider">or sign up with</div>
-                
-                <button type="button" class="btn btn-google" onclick="googleLogin()">
-                    <i class="fab fa-google" style="color: #4285f4;"></i>
-                    Continue with Google
-                </button>
-            </form>
-        </div>
+
+<!-- AUTH -->
+<div class="auth" id="auth">
+    <div class="auth-box">
+        <div class="auth-logo">t.best</div>
+        <p style="margin:10px 0 20px">Connect. Create. Trend.</p>
+        <input placeholder="Email or Username">
+        <input type="password" placeholder="Password">
+        <button onclick="login()">Login</button>
+        <p style="margin-top:15px;font-size:.85em">Owned & built by <b>Omotayo Fanegan</b></p>
     </div>
+</div>
 
-    <!-- Main App -->
-    <div class="app-container" id="appContainer">
-        <!-- Left Sidebar -->
-        <div class="sidebar-left">
-            <div class="logo">
-                <i class="fas fa-globe"></i>
-                <span>SocialVerse</span>
-            </div>
-            
-            <ul class="nav-menu">
-                <li class="nav-item active" onclick="showSection('home')">
-                    <i class="fas fa-home"></i>
-                    <span>Home Feed</span>
-                </li>
-                <li class="nav-item" onclick="showSection('trending')">
-                    <i class="fas fa-fire"></i>
-                    <span>Trending</span>
-                    <span class="notification-badge">3</span>
-                </li>
-                <li class="nav-item" onclick="showSection('videos')">
-                    <i class="fas fa-video"></i>
-                    <span>Short Videos</span>
-                </li>
-                <li class="nav-item" onclick="showSection('music')">
-                    <i class="fas fa-music"></i>
-                    <span>Music & Audio</span>
-                </li>
-                <li class="nav-item" onclick="showSection('news')">
-                    <i class="fas fa-newspaper"></i>
-                    <span>News & Gist</span>
-                </li>
-                <li class="nav-item" onclick="showSection('saved')">
-                    <i class="fas fa-bookmark"></i>
-                    <span>Saved Items</span>
-                </li>
-                <li class="nav-item" onclick="showSection('groups')">
-                    <i class="fas fa-users"></i>
-                    <span>Groups</span>
-                </li>
-                <li class="nav-item" onclick="showSection('live')">
-                    <i class="fas fa-broadcast-tower"></i>
-                    <span>Live <span class="live-badge">LIVE</span></span>
-                </li>
-            </ul>
-            
-            <div class="user-profile-mini">
-                <div class="user-avatar">JD</div>
-                <div class="user-info">
-                    <div style="font-weight: 600;">John Doe</div>
-                    <div style="font-size: 0.85em; color: #b0b3b8;">@johndoe</div>
-                </div>
-            </div>
+<!-- APP -->
+<div class="app" id="app">
+
+    <aside class="sidebar">
+        <div class="brand">t.best</div>
+        <div class="nav">
+            <div><i class="fa fa-home"></i> Home</div>
+            <div><i class="fa fa-fire"></i> Trending</div>
+            <div><i class="fa fa-video"></i> Videos</div>
+            <div><i class="fa fa-music"></i> Music</div>
+            <div><i class="fa fa-users"></i> Groups</div>
         </div>
+    </aside>
 
-        <!-- Main Content -->
-        <div class="main-content">
-            <!-- Stories -->
-            <div class="stories-container">
-                <div class="story unseen" style="background: linear-gradient(45deg, #ff0050, #00f2ea);">
-                    <div class="story-avatar" style="background: #333;"><i class="fas fa-plus"></i></div>
-                    <div class="story-name">Add Story</div>
-                </div>
-                <div class="story unseen">
-                    <div class="story-avatar"></div>
-                    <div class="story-name">Sarah_L</div>
-                </div>
-                <div class="story unseen">
-                    <div class="story-avatar"></div>
-                    <div class="story-name">Mike_T</div>
-                </div>
-                <div class="story">
-                    <div class="story-avatar"></div>
-                    <div class="story-name">Emma_W</div>
-                </div>
-                <div class="story">
-                    <div class="story-avatar"></div>
-                    <div class="story-name">David_K</div>
-                </div>
-                <div class="story">
-                    <div class="story-avatar"></div>
-                    <div class="story-name">Lisa_M</div>
-                </div>
-            </div>
-
-            <!-- Create Post -->
-            <div class="create-post">
-                <div class="create-post-header">
-                    <div class="user-avatar" style="width: 45px; height: 45px; font-size: 1.2em;">JD</div>
-                    <input type="text" placeholder="What's on your mind, John?">
-                </div>
-                <div class="create-post-actions">
-                    <div class="post-action video">
-                        <i class="fas fa-video"></i>
-                        <span>Live Video</span>
-                    </div>
-                    <div class="post-action photo">
-                        <i class="fas fa-images"></i>
-                        <span>Photo/Video</span>
-                    </div>
-                    <div class="post-action music">
-                        <i class="fas fa-music"></i>
-                        <span>Music</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Feed Posts -->
-            <div class="feed-post">
-                <div class="post-header">
-                    <div class="post-user">
-                        <div class="post-user-avatar"></div>
-                        <div class="post-user-info">
-                            <h4>Chioma Beauty</h4>
-                            <span>2 hours ago · <i class="fas fa-globe-americas"></i></span>
-                        </div>
-                    </div>
-                    <i class="fas fa-ellipsis-h" style="color: #b0b3b8; cursor: pointer;"></i>
-                </div>
-                <div class="post-content">
-                    Just dropped my new single! 🎵🔥 Check it out and let me know what you think! Link in bio! 
-                    #NewMusic #Afrobeats #NaijaMusic
-                </div>
-                <div class="video-container">
-                    <div class="video-placeholder">
-                        <i class="fas fa-play-circle"></i>
-                        <p>Music Video: "Summer Vibes" - Chioma Beauty</p>
-                        <p style="font-size: 0.9em; margin-top: 10px;">0:00 / 3:45</p>
-                    </div>
-                    <div class="video-actions-overlay">
-                        <button class="video-action-btn liked" onclick="toggleLike(this)">
-                            <i class="fas fa-heart"></i>
-                        </button>
-                        <button class="video-action-btn">
-                            <i class="fas fa-comment"></i>
-                        </button>
-                        <button class="video-action-btn">
-                            <i class="fas fa-share"></i>
-                        </button>
-                        <button class="video-action-btn">
-                            <i class="fas fa-music"></i>
-                        </button>
-                    </div>
-                </div>
-                <div class="post-stats">
-                    <span><i class="fas fa-heart" style="color: var(--primary);"></i> 12.5K likes</span>
-                    <span>856 comments · 2.3K shares</span>
-                </div>
-                <div class="post-buttons">
-                    <div class="post-btn liked" onclick="toggleLike(this)">
-                        <i class="fas fa-heart"></i> Like
-                    </div>
-                    <div class="post-btn">
-                        <i class="fas fa-comment-alt"></i> Comment
-                    </div>
-                    <div class="post-btn">
-                        <i class="fas fa-share"></i> Share
-                    </div>
-                </div>
-            </div>
-
-            <div class="feed-post">
-                <div class="post-header">
-                    <div class="post-user">
-                        <div class="post-user-avatar" style="background: linear-gradient(45deg, #f7b928, #f3425f);"></div>
-                        <div class="post-user-info">
-                            <h4>NaijaGist Daily</h4>
-                            <span>4 hours ago · <i class="fas fa-globe-americas"></i></span>
-                        </div>
-                    </div>
-                    <i class="fas fa-ellipsis-h" style="color: #b0b3b8; cursor: pointer;"></i>
-                </div>
-                <div class="post-content">
-                    BREAKING: Major announcement coming from the entertainment industry tonight! 
-                    Stay tuned for exclusive updates! 🚨📰
-                </div>
-                <div style="padding: 20px; background: #3a3b3c; margin: 0 20px 20px; border-radius: 10px;">
-                    <h3 style="margin-bottom: 10px;">Entertainment News</h3>
-                    <p style="color: #b0b3b8;">Click to read full story...</p>
-                </div>
-                <div class="post-stats">
-                    <span><i class="fas fa-heart" style="color: var(--primary);"></i> 5.2K likes</span>
-                    <span>1.2K comments · 890 shares</span>
-                </div>
-                <div class="post-buttons">
-                    <div class="post-btn" onclick="toggleLike(this)">
-                        <i class="fas fa-heart"></i> Like
-                    </div>
-                    <div class="post-btn">
-                        <i class="fas fa-comment-alt"></i> Comment
-                    </div>
-                    <div class="post-btn">
-                        <i class="fas fa-share"></i> Share
-                    </div>
-                </div>
-            </div>
-
-            <div class="feed-post">
-                <div class="post-header">
-                    <div class="post-user">
-                        <div class="post-user-avatar" style="background: linear-gradient(45deg, #00f2ea, #667eea);"></div>
-                        <div class="post-user-info">
-                            <h4>DanceCrew Official</h4>
-                            <span>6 hours ago · <i class="fas fa-globe-americas"></i></span>
-                        </div>
-                    </div>
-                    <i class="fas fa-ellipsis-h" style="color: #b0b3b8; cursor: pointer;"></i>
-                </div>
-                <div class="post-content">
-                    New dance challenge alert! 🕺💃 Can you do this move? 
-                    Tag us in your videos! #DanceChallenge #Viral
-                </div>
-                <div class="video-container" style="min-height: 600px;">
-                    <div class="video-placeholder">
-                        <i class="fas fa-play-circle"></i>
-                        <p>Short Video - Dance Challenge</p>
-                        <p style="font-size: 0.9em; margin-top: 10px;">For You Page Style Content</p>
-                    </div>
-                    <div class="video-actions-overlay">
-                        <button class="video-action-btn" onclick="toggleLike(this)">
-                            <i class="fas fa-heart"></i>
-                        </button>
-                        <button class="video-action-btn">
-                            <i class="fas fa-comment"></i>
-                        </button>
-                        <button class="video-action-btn">
-                            <i class="fas fa-share"></i>
-                        </button>
-                        <button class="video-action-btn">
-                            <i class="fas fa-bookmark"></i>
-                        </button>
-                    </div>
-                </div>
-                <div class="post-stats">
-                    <span><i class="fas fa-heart" style="color: var(--primary);"></i> 45.8K likes</span>
-                    <span>3.4K comments · 8.9K shares</span>
-                </div>
-                <div class="post-buttons">
-                    <div class="post-btn" onclick="toggleLike(this)">
-                        <i class="fas fa-heart"></i> Like
-                    </div>
-                    <div class="post-btn">
-                        <i class="fas fa-comment-alt"></i> Comment
-                    </div>
-                    <div class="post-btn">
-                        <i class="fas fa-share"></i> Share
-                    </div>
-                </div>
-            </div>
+    <main class="feed">
+        <div class="card">
+            <b>Welcome to t.best social network</b>
+            <p style="margin-top:8px;color:var(--muted)">
+                A next-generation social platform built for creators and communities.
+            </p>
         </div>
+    </main>
 
-        <!-- Right Sidebar -->
-        <div class="sidebar-right">
-            <h3 class="section-title">Trending in Nigeria</h3>
-            <div class="trending-item">
-                <div class="trending-rank">1</div>
-                <div class="trending-info">
-                    <h4>#BBNaijaReunion</h4>
-                    <span>125K posts</span>
-                </div>
-            </div>
-            <div class="trending-item">
-                <div class="trending-rank">2</div>
-                <div class="trending-info">
-                    <h4>Wizkid New Album</h4>
-                    <span>89K posts</span>
-                </div>
-            </div>
-            <div class="trending-item">
-                <div class="trending-rank">3</div>
-                <div class="trending-info">
-                    <h4>#EndSARS Memorial</h4>
-                    <span>67K posts</span>
-                </div>
-            </div>
-            <div class="trending-item">
-                <div class="trending-rank">4</div>
-                <div class="trending-info">
-                    <h4>Super Eagles Match</h4>
-                    <span>45K posts</span>
-                </div>
-            </div>
-
-            <h3 class="section-title" style="margin-top: 30px;">Online Friends</h3>
-            <div class="contact-item" onclick="openChat('Sarah Love')">
-                <div class="contact-avatar">
-                    <div class="user-avatar" style="width: 35px; height: 35px; font-size: 0.9em;">SL</div>
-                    <div class="online-indicator"></div>
-                </div>
-                <span>Sarah Love</span>
-            </div>
-            <div class="contact-item" onclick="openChat('Mike Tyson')">
-                <div class="contact-avatar">
-                    <div class="user-avatar" style="width: 35px; height: 35px; font-size: 0.9em; background: linear-gradient(45deg, #f7b928, #f3425f);">MT</div>
-                    <div class="online-indicator"></div>
-                </div>
-                <span>Mike Tyson</span>
-            </div>
-            <div class="contact-item" onclick="openChat('Emma Watson')">
-                <div class="contact-avatar">
-                    <div class="user-avatar" style="width: 35px; height: 35px; font-size: 0.9em; background: linear-gradient(45deg, #00f2ea, #667eea);">EW</div>
-                    <div class="online-indicator" style="background: #666;"></div>
-                </div>
-                <span>Emma Watson</span>
-            </div>
-            <div class="contact-item" onclick="openChat('David King')">
-                <div class="contact-avatar">
-                    <div class="user-avatar" style="width: 35px; height: 35px; font-size: 0.9em; background: linear-gradient(45deg, #667eea, #764ba2);">DK</div>
-                    <div class="online-indicator"></div>
-                </div>
-                <span>David King</span>
-            </div>
-
-            <!-- Music Player Widget -->
-            <div class="music-player">
-                <div class="music-info">
-                    <div class="music-cover">
-                        <i class="fas fa-music"></i>
-                    </div>
-                    <div class="music-details">
-                        <h4>Essence (Remix)</h4>
-                        <span>Wizkid ft. Tems</span>
-                    </div>
-                </div>
-                <div class="progress" style="height: 4px; background: rgba(255,255,255,0.3); border-radius: 2px; margin-bottom: 15px;">
-                    <div style="width: 40%; height: 100%; background: white; border-radius: 2px;"></div>
-                </div>
-                <div class="music-controls">
-                    <button class="music-btn"><i class="fas fa-random"></i></button>
-                    <button class="music-btn"><i class="fas fa-step-backward"></i></button>
-                    <button class="music-btn play"><i class="fas fa-play"></i></button>
-                    <button class="music-btn"><i class="fas fa-step-forward"></i></button>
-                    <button class="music-btn"><i class="fas fa-redo"></i></button>
-                </div>
-            </div>
+    <aside class="right">
+        <div class="card">
+            <b>Trending Today</b>
+            <p style="margin-top:10px">#Afrobeats</p>
+            <p>#TechNigeria</p>
+            <p>#CreatorsHub</p>
         </div>
-    </div>
+    </aside>
 
-    <!-- Chat Modal -->
-    <div class="chat-modal" id="chatModal">
-        <div class="chat-header">
-            <div class="chat-user">
-                <div class="user-avatar" style="width: 35px; height: 35px;" id="chatUserAvatar">SL</div>
-                <span id="chatUserName">Sarah Love</span>
-            </div>
-            <div>
-                <i class="fas fa-video" style="margin-right: 15px; cursor: pointer; color: var(--primary);"></i>
-                <i class="fas fa-times" style="cursor: pointer;" onclick="closeChat()"></i>
-            </div>
-        </div>
-        <div class="chat-messages" id="chatMessages">
-            <div class="message received">Hey! How are you doing? 😊</div>
-            <div class="message sent">I'm great! Just checking out the new music drops</div>
-            <div class="message received">Same here! Have you heard Chioma's new single?</div>
-        </div>
-        <div class="chat-input">
-            <input type="text" placeholder="Type a message..." id="messageInput" onkeypress="sendMessage(event)">
-            <button onclick="sendMessage()"><i class="fas fa-paper-plane"></i></button>
-        </div>
-    </div>
+</div>
 
-    <script>
-        // Tab Switching
-        function switchTab(tab) {
-            const tabs = document.querySelectorAll('.auth-tab');
-            const forms = document.querySelectorAll('.auth-form');
-            
-            tabs.forEach(t => t.classList.remove('active'));
-            forms.forEach(f => f.classList.remove('active'));
-            
-            if (tab === 'login') {
-                tabs[0].classList.add('active');
-                document.getElementById('loginForm').classList.add('active');
-            } else {
-                tabs[1].classList.add('active');
-                document.getElementById('registerForm').classList.add('active');
-            }
-        }
+<footer>
+© 2026 t.best social network.  
+Founded & owned by <b>Omotayo Fanegan</b>. All rights reserved.
+</footer>
 
-        // Login Function
-        function login() {
-            document.getElementById('authModal').style.opacity = '0';
-            setTimeout(() => {
-                document.getElementById('authModal').style.display = 'none';
-                document.getElementById('appContainer').classList.add('active');
-            }, 500);
-        }
+<script>
+function login(){
+    document.getElementById("auth").style.display="none";
+    document.getElementById("app").classList.add("active");
+}
+</script>
 
-        // Register Function
-        function register() {
-            login(); // Same effect for demo
-        }
-
-        // Google Login
-        function googleLogin() {
-            // Simulate Google OAuth popup
-            alert('Google Sign-In would open here\n\nIn production, this would use Google OAuth API');
-            login();
-        }
-
-        // Like Toggle
-        function toggleLike(element) {
-            element.classList.toggle('liked');
-            const icon = element.querySelector('i');
-            if (element.classList.contains('liked')) {
-                icon.classList.remove('far');
-                icon.classList.add('fas');
-                // Add animation
-                icon.style.transform = 'scale(1.3)';
-                setTimeout(() => {
-                    icon.style.transform = 'scale(1)';
-                }, 200);
-            }
-        }
-
-        // Chat Functions
-        function openChat(userName) {
-            document.getElementById('chatModal').classList.add('active');
-            document.getElementById('chatUserName').textContent = userName;
-            document.getElementById('chatUserAvatar').textContent = userName.split(' ').map(n => n[0]).join('');
-        }
-
-        function closeChat() {
-            document.getElementById('chatModal').classList.remove('active');
-        }
-
-        function sendMessage(event) {
-            if (event && event.key !== 'Enter') return;
-            
-            const input = document.getElementById('messageInput');
-            const message = input.value.trim();
-            
-            if (message) {
-                const chatMessages = document.getElementById('chatMessages');
-                const newMessage = document.createElement('div');
-                newMessage.className = 'message sent';
-                newMessage.textContent = message;
-                chatMessages.appendChild(newMessage);
-                chatMessages.scrollTop = chatMessages.scrollHeight;
-                input.value = '';
-                
-                // Simulate reply
-                setTimeout(() => {
-                    const reply = document.createElement('div');
-                    reply.className = 'message received';
-                    reply.textContent = 'That\'s awesome! 🔥';
-                    chatMessages.appendChild(reply);
-                    chatMessages.scrollTop = chatMessages.scrollHeight;
-                }, 1000);
-            }
-        }
-
-        // Navigation
-        function showSection(section) {
-            document.querySelectorAll('.nav-item').forEach(item => {
-                item.classList.remove('active');
-            });
-            event.currentTarget.classList.add('active');
-        }
-
-        // Story Click
-        document.querySelectorAll('.story').forEach(story => {
-            story.addEventListener('click', function() {
-                if (this.classList.contains('unseen')) {
-                    this.classList.remove('unseen');
-                }
-                alert('Story viewer would open here - Full screen story view with progress bar');
-            });
-        });
-
-        // Simulate real-time notifications
-        setInterval(() => {
-            const badge = document.querySelector('.notification-badge');
-            if (badge && Math.random() > 0.7) {
-                badge.textContent = parseInt(badge.textContent) + 1;
-                badge.style.animation = 'pulse 0.5s';
-                setTimeout(() => {
-                    badge.style.animation = '';
-                }, 500);
-            }
-        }, 10000);
-
-        // Mobile touch gestures for videos (swipe up/down)
-        let touchStartY = 0;
-        document.addEventListener('touchstart', e => {
-            touchStartY = e.touches[0].clientY;
-        });
-
-        document.addEventListener('touchend', e => {
-            const touchEndY = e.changedTouches[0].clientY;
-            const diff = touchStartY - touchEndY;
-            
-            // Swipe up detection for next video
-            if (Math.abs(diff) > 50 && e.target.closest('.video-container')) {
-                console.log('Swipe detected - would load next video');
-            }
-        });
-    </script>
 </body>
 </html>
