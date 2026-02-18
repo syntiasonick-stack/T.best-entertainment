@@ -1,185 +1,200 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>t.best social network — Connect. Create. Trend.</title>
-
-<meta name="description" content="t.best social network is a modern social platform to connect, share moments, watch videos, chat and trend globally." />
-<meta name="author" content="Omotayo Fanegan" />
-<meta name="keywords" content="social network, videos, chat, music, trends, nigeria social media" />
-
-<link rel="icon" href="favicon.ico" />
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+<title>t.best — Watch. Create. Trend.</title>
 
 <style>
-:root {
-    --primary:#ff0050;
-    --secondary:#00f2ea;
-    --dark:#121212;
-    --card:#242526;
-    --text:#e4e6eb;
-    --muted:#b0b3b8;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
-* { margin:0; padding:0; box-sizing:border-box; font-family:Segoe UI,Tahoma; }
-
-body { background:var(--dark); color:var(--text); }
-
-/* ===== AUTH ===== */
-.auth {
-    position:fixed; inset:0;
-    display:flex; align-items:center; justify-content:center;
-    background:linear-gradient(135deg,#667eea,#764ba2);
-    z-index:9999;
+body {
+  background: black;
+  color: white;
+  overflow: hidden;
 }
 
-.auth-box {
-    background:#fff; color:#222;
-    width:420px; max-width:90%;
-    padding:35px; border-radius:18px;
-    text-align:center;
+/* Top Bar */
+.top-bar {
+  position: fixed;
+  top: 15px;
+  width: 100%;
+  text-align: center;
+  z-index: 10;
+  font-weight: bold;
 }
 
-.auth-logo {
-    font-size:2.3em;
-    font-weight:800;
-    background:linear-gradient(45deg,var(--primary),var(--secondary));
-    -webkit-background-clip:text;
-    -webkit-text-fill-color:transparent;
+.top-bar span {
+  margin: 0 15px;
+  opacity: 0.6;
 }
 
-.auth-box input {
-    width:100%; padding:14px;
-    margin:12px 0;
-    border-radius:10px;
-    border:2px solid #ddd;
+.top-bar .active {
+  opacity: 1;
 }
 
-.auth-box button {
-    width:100%;
-    padding:14px;
-    background:linear-gradient(45deg,var(--primary),#ff4081);
-    border:none; border-radius:10px;
-    color:#fff; font-weight:700;
-    cursor:pointer;
+/* Video Feed */
+.feed {
+  height: 100vh;
+  overflow-y: scroll;
+  scroll-snap-type: y mandatory;
 }
 
-/* ===== APP ===== */
-.app { display:none; }
-
-.app.active {
-    display:grid;
-    grid-template-columns:260px 1fr 320px;
-    min-height:100vh;
+.video {
+  height: 100vh;
+  position: relative;
+  scroll-snap-align: start;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #111;
 }
 
-/* SIDEBAR */
-.sidebar {
-    padding:20px;
-    border-right:1px solid #333;
+/* Fake video placeholder */
+.video::before {
+  content: "VIDEO";
+  font-size: 2em;
+  opacity: 0.3;
 }
 
-.brand {
-    font-size:1.6em;
-    font-weight:800;
-    margin-bottom:25px;
+/* Right Actions */
+.actions {
+  position: absolute;
+  right: 15px;
+  bottom: 120px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: center;
+}
+
+.action {
+  text-align: center;
+  font-size: 1.5em;
+  cursor: pointer;
+}
+
+.action span {
+  font-size: 0.7em;
+  display: block;
+  margin-top: 4px;
+}
+
+/* Bottom Info */
+.info {
+  position: absolute;
+  bottom: 60px;
+  left: 15px;
+  max-width: 70%;
+}
+
+.info .user {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.info .music {
+  font-size: 0.85em;
+  opacity: 0.8;
+  margin-top: 6px;
+}
+
+/* Bottom Nav */
+.nav {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  height: 55px;
+  background: black;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  border-top: 1px solid #222;
 }
 
 .nav div {
-    padding:14px;
-    border-radius:10px;
-    cursor:pointer;
-    color:var(--muted);
-}
-.nav div:hover { background:#333; color:#fff; }
-
-/* FEED */
-.feed { padding:20px; }
-
-.card {
-    background:var(--card);
-    border-radius:15px;
-    padding:18px;
-    margin-bottom:22px;
+  font-size: 1.4em;
+  opacity: 0.7;
 }
 
-/* RIGHT */
-.right {
-    padding:20px;
-    border-left:1px solid #333;
+.nav .add {
+  background: white;
+  color: black;
+  padding: 5px 14px;
+  border-radius: 8px;
+  font-weight: bold;
+  opacity: 1;
 }
 
-/* FOOTER */
-footer {
-    text-align:center;
-    padding:20px;
-    font-size:.85em;
-    color:var(--muted);
+/* Owner watermark */
+.watermark {
+  position: fixed;
+  top: 10px;
+  left: 10px;
+  font-size: 0.7em;
+  opacity: 0.4;
 }
 </style>
 </head>
 
 <body>
 
-<!-- AUTH -->
-<div class="auth" id="auth">
-    <div class="auth-box">
-        <div class="auth-logo">t.best</div>
-        <p style="margin:10px 0 20px">Connect. Create. Trend.</p>
-        <input placeholder="Email or Username">
-        <input type="password" placeholder="Password">
-        <button onclick="login()">Login</button>
-        <p style="margin-top:15px;font-size:.85em">Owned & built by <b>Omotayo Fanegan</b></p>
+<div class="watermark">
+t.best social network • Omotayo Fanegan
+</div>
+
+<div class="top-bar">
+  <span>Following</span>
+  <span class="active">For You</span>
+</div>
+
+<div class="feed">
+
+  <div class="video">
+    <div class="info">
+      <div class="user">@chioma_music</div>
+      <div>New single out now 🔥🔥</div>
+      <div class="music">🎵 Chioma – Summer Vibes</div>
     </div>
-</div>
 
-<!-- APP -->
-<div class="app" id="app">
+    <div class="actions">
+      <div class="action">❤️<span>12.5K</span></div>
+      <div class="action">💬<span>846</span></div>
+      <div class="action">🔄<span>2.1K</span></div>
+      <div class="action">🔖</div>
+    </div>
+  </div>
 
-    <aside class="sidebar">
-        <div class="brand">t.best</div>
-        <div class="nav">
-            <div><i class="fa fa-home"></i> Home</div>
-            <div><i class="fa fa-fire"></i> Trending</div>
-            <div><i class="fa fa-video"></i> Videos</div>
-            <div><i class="fa fa-music"></i> Music</div>
-            <div><i class="fa fa-users"></i> Groups</div>
-        </div>
-    </aside>
+  <div class="video">
+    <div class="info">
+      <div class="user">@dancecrew</div>
+      <div>Can you do this move? 🕺</div>
+      <div class="music">🎵 Viral Dance Beat</div>
+    </div>
 
-    <main class="feed">
-        <div class="card">
-            <b>Welcome to t.best social network</b>
-            <p style="margin-top:8px;color:var(--muted)">
-                A next-generation social platform built for creators and communities.
-            </p>
-        </div>
-    </main>
-
-    <aside class="right">
-        <div class="card">
-            <b>Trending Today</b>
-            <p style="margin-top:10px">#Afrobeats</p>
-            <p>#TechNigeria</p>
-            <p>#CreatorsHub</p>
-        </div>
-    </aside>
+    <div class="actions">
+      <div class="action">❤️<span>45K</span></div>
+      <div class="action">💬<span>3.2K</span></div>
+      <div class="action">🔄<span>8.9K</span></div>
+      <div class="action">🔖</div>
+    </div>
+  </div>
 
 </div>
 
-<footer>
-© 2026 t.best social network.  
-Founded & owned by <b>Omotayo Fanegan</b>. All rights reserved.
-</footer>
-
-<script>
-function login(){
-    document.getElementById("auth").style.display="none";
-    document.getElementById("app").classList.add("active");
-}
-</script>
+<div class="nav">
+  <div>🏠</div>
+  <div>🔍</div>
+  <div class="add">＋</div>
+  <div>💬</div>
+  <div>👤</div>
+</div>
 
 </body>
 </html>
