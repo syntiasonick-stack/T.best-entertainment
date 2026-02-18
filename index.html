@@ -1,0 +1,1114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>T.Best Entertainment - Omotayo Fanegan | Play, Earn & Stream</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;600;800&family=Roboto+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'orbitron': ['Orbitron', 'sans-serif'],
+                        'inter': ['Inter', 'sans-serif'],
+                        'mono': ['Roboto Mono', 'monospace'],
+                    },
+                    colors: {
+                        'neon-pink': '#ff006e',
+                        'neon-blue': '#00f5ff',
+                        'neon-purple': '#bc13fe',
+                        'neon-green': '#00ff88',
+                        'neon-yellow': '#ffee00',
+                        'dark-bg': '#0a0a0f',
+                        'card-bg': '#16161f',
+                        'success': '#00ff88',
+                        'danger': '#ff006e',
+                        'warning': '#ffee00',
+                        'owner': '#ffd700',
+                    },
+                    animation: {
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'float': 'float 6s ease-in-out infinite',
+                        'glow': 'glow 2s ease-in-out infinite alternate',
+                        'slide-up': 'slideUp 0.5s ease-out',
+                        'spin-slow': 'spin 3s linear infinite',
+                        'bounce-slight': 'bounceSlight 2s infinite',
+                        'shimmer': 'shimmer 2s linear infinite',
+                        'border-flow': 'borderFlow 3s linear infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-20px)' },
+                        },
+                        glow: {
+                            '0%': { boxShadow: '0 0 5px #ff006e, 0 0 10px #ff006e' },
+                            '100%': { boxShadow: '0 0 20px #ff006e, 0 0 30px #ff006e' },
+                        },
+                        slideUp: {
+                            '0%': { transform: 'translateY(20px)', opacity: '0' },
+                            '100%': { transform: 'translateY(0)', opacity: '1' },
+                        },
+                        bounceSlight: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        },
+                        shimmer: {
+                            '0%': { backgroundPosition: '-1000px 0' },
+                            '100%': { backgroundPosition: '1000px 0' },
+                        },
+                        borderFlow: {
+                            '0%, 100%': { borderColor: '#ff006e' },
+                            '33%': { borderColor: '#00f5ff' },
+                            '66%': { borderColor: '#bc13fe' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background: linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 50%, #16213e 100%);
+            min-height: 100vh;
+        }
+        .glass-panel {
+            background: rgba(22, 22, 31, 0.8);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .neon-text {
+            text-shadow: 0 0 10px currentColor;
+        }
+        .gradient-text {
+            background: linear-gradient(135deg, #ff006e, #00f5ff, #bc13fe);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .owner-text {
+            background: linear-gradient(135deg, #ffd700, #ffed4e, #ffb700);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .hover-scale {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .hover-scale:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(255, 0, 110, 0.3);
+        }
+        .owner-badge {
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.2), rgba(255, 237, 78, 0.1));
+            border: 2px solid #ffd700;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+        }
+        .owner-avatar {
+            border: 3px solid #ffd700;
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
+        }
+        .slot-machine {
+            background: linear-gradient(180deg, #2a2a3e 0%, #1e1e2e 100%);
+            border: 3px solid #ffee00;
+            box-shadow: 0 0 20px rgba(255, 238, 0, 0.3);
+        }
+        .crash-graph {
+            background: linear-gradient(180deg, rgba(0,255,136,0.1) 0%, transparent 100%);
+        }
+        .live-badge {
+            background: linear-gradient(90deg, #ff006e, #ff3333);
+            animation: pulse 2s infinite;
+        }
+        .wallet-card {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            border: 2px solid rgba(0, 255, 136, 0.3);
+        }
+        .demo-wallet {
+            border-color: rgba(255, 238, 0, 0.5);
+            background: linear-gradient(135deg, rgba(255,238,0,0.1), rgba(255,0,110,0.1));
+        }
+        .hero-owner-image {
+            position: relative;
+            overflow: hidden;
+            border-radius: 50%;
+            border: 4px solid transparent;
+            background: linear-gradient(45deg, #ff006e, #00f5ff, #bc13fe, #ffd700) border-box;
+            -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+            mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+        }
+        .studio-image {
+            border-radius: 20px;
+            border: 2px solid rgba(255, 215, 0, 0.3);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+        }
+    </style>
+</head>
+<body class="font-inter text-white overflow-x-hidden">
+
+    <!-- Owner Admin Bar (Visible when logged in as owner) -->
+    <div id="ownerBar" class="hidden fixed top-0 w-full z-[60] bg-gradient-to-r from-yellow-600 via-yellow-500 to-yellow-600 text-black py-2 px-4 shadow-lg">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div class="flex items-center gap-3 font-bold">
+                <i class="fas fa-crown text-xl"></i>
+                <span>OWNER MODE: Omotayo Fanegan</span>
+                <span class="bg-black/20 px-3 py-1 rounded-full text-sm">Full Access Granted</span>
+            </div>
+            <div class="flex gap-4 text-sm font-semibold">
+                <button onclick="showSection('admin')" class="hover:underline"><i class="fas fa-cog mr-1"></i>Admin Panel</button>
+                <button onclick="showSection('analytics')" class="hover:underline"><i class="fas fa-chart-line mr-1"></i>Analytics</button>
+                <button onclick="logoutOwner()" class="hover:underline text-red-800"><i class="fas fa-sign-out-alt mr-1"></i>Exit Owner Mode</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav id="mainNav" class="fixed w-full z-50 glass-panel border-b border-white/10 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center space-x-3 cursor-pointer" onclick="showSection('home')">
+                    <div class="relative">
+                        <i class="fas fa-play-circle text-3xl text-neon-pink animate-pulse-slow"></i>
+                        <div class="absolute -top-1 -right-1 w-3 h-3 bg-yellow-400 rounded-full border-2 border-black"></div>
+                    </div>
+                    <div class="flex flex-col">
+                        <span class="font-orbitron text-2xl font-bold gradient-text">T.BEST</span>
+                        <span class="text-[10px] text-yellow-400 font-bold tracking-wider">BY OMOTAYO FANEGAN</span>
+                    </div>
+                </div>
+                
+                <div class="hidden md:flex space-x-6 items-center">
+                    <button onclick="showSection('home')" class="nav-btn hover:text-neon-pink transition-colors font-semibold">Home</button>
+                    <button onclick="showSection('owner')" class="nav-btn hover:text-yellow-400 transition-colors font-semibold text-yellow-400">
+                        <i class="fas fa-star mr-1"></i>Owner
+                    </button>
+                    <button onclick="showSection('media')" class="nav-btn hover:text-neon-blue transition-colors font-semibold">Media</button>
+                    <button onclick="showSection('games')" class="nav-btn hover:text-neon-yellow transition-colors font-semibold">Games</button>
+                    <button onclick="showSection('live')" class="nav-btn hover:text-red-500 transition-colors font-semibold">Live</button>
+                    <button onclick="showSection('market')" class="nav-btn hover:text-neon-purple transition-colors font-semibold">Market</button>
+                    <button onclick="showSection('wallet')" class="nav-btn hover:text-neon-green transition-colors font-semibold">Wallet</button>
+                </div>
+
+                <div class="flex items-center space-x-4">
+                    <div id="navBalance" class="hidden md:flex flex-col items-end mr-4 cursor-pointer" onclick="showSection('wallet')">
+                        <div class="text-xs text-gray-400" id="accountTypeLabel">REAL ACCOUNT</div>
+                        <div class="font-mono font-bold text-neon-green" id="navBalanceAmount">$0.00</div>
+                    </div>
+
+                    <button onclick="toggleUploadModal()" class="bg-gradient-to-r from-neon-pink to-neon-purple px-4 py-2 rounded-full font-bold hover:shadow-lg transition-all transform hover:scale-105 text-sm">
+                        <i class="fas fa-plus mr-1"></i>Upload
+                    </button>
+                    
+                    <button onclick="toggleLiveModal()" class="bg-red-600 hover:bg-red-700 px-4 py-2 rounded-full font-bold transition-all animate-pulse text-sm flex items-center gap-2">
+                        <i class="fas fa-broadcast-tower"></i>GO LIVE
+                    </button>
+
+                    <button onclick="showSection('login')" id="authBtn" class="text-gray-300 hover:text-white transition-colors relative">
+                        <i class="fas fa-user-circle text-2xl"></i>
+                        <div id="ownerIndicator" class="hidden absolute -top-1 -right-1 w-3 h-3 bg-yellow-400 rounded-full border-2 border-black"></div>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="pt-16 min-h-screen" id="mainContent">
+
+        <!-- HOME SECTION -->
+        <section id="home" class="section active">
+            <!-- Hero with Owner -->
+            <div class="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
+                <div class="absolute inset-0 z-0">
+                    <div class="absolute inset-0 bg-gradient-to-b from-transparent via-dark-bg/50 to-dark-bg"></div>
+                    <div class="absolute top-20 left-10 w-72 h-72 bg-neon-pink/20 rounded-full blur-3xl animate-float"></div>
+                    <div class="absolute bottom-20 right-10 w-96 h-96 bg-neon-blue/20 rounded-full blur-3xl animate-float" style="animation-delay: 2s;"></div>
+                </div>
+                
+                <div class="relative z-10 max-w-7xl mx-auto px-4 grid md:grid-cols-2 gap-12 items-center">
+                    <!-- Left Content -->
+                    <div class="text-center md:text-left">
+                        <div class="inline-block mb-4 px-4 py-2 rounded-full owner-badge">
+                            <i class="fas fa-crown text-yellow-400 mr-2"></i>
+                            <span class="font-bold text-yellow-400">Founded by Omotayo Fanegan</span>
+                        </div>
+                        
+                        <h1 class="font-orbitron text-5xl md:text-7xl font-black mb-6 leading-tight">
+                            <span class="block gradient-text">T.BEST</span>
+                            <span class="block text-white text-3xl md:text-5xl mt-2">ENTERTAINMENT</span>
+                        </h1>
+                        
+                        <p class="text-xl text-gray-300 mb-8">
+                            Welcome to the future of entertainment. Created by <span class="text-yellow-400 font-bold">Omotayo Fanegan</span> - 
+                            Upload content, play real money games, stream live, and win big.
+                        </p>
+                        
+                        <div class="flex flex-col sm:flex-row gap-4 justify-center md:justify-start mb-8">
+                            <button onclick="showSection('games')" class="px-8 py-4 bg-gradient-to-r from-neon-yellow to-orange-500 text-black rounded-full font-bold text-lg hover:shadow-lg transition-all transform hover:scale-105">
+                                <i class="fas fa-gamepad mr-2"></i>Play & Win
+                            </button>
+                            <button onclick="showSection('owner')" class="px-8 py-4 bg-gradient-to-r from-yellow-600 to-yellow-400 text-black rounded-full font-bold text-lg hover:shadow-lg transition-all transform hover:scale-105">
+                                <i class="fas fa-star mr-2"></i>Meet the Owner
+                            </button>
+                        </div>
+
+                        <!-- Stats -->
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                            <div class="glass-panel rounded-2xl p-4 text-center">
+                                <div class="text-3xl font-bold text-neon-yellow">$2.5M+</div>
+                                <div class="text-sm text-gray-400">Paid to Winners</div>
+                            </div>
+                            <div class="glass-panel rounded-2xl p-4 text-center">
+                                <div class="text-3xl font-bold text-neon-green">50K+</div>
+                                <div class="text-sm text-gray-400">Live Streamers</div>
+                            </div>
+                            <div class="glass-panel rounded-2xl p-4 text-center">
+                                <div class="text-3xl font-bold text-neon-pink">1M+</div>
+                                <div class="text-sm text-gray-400">Games Played</div>
+                            </div>
+                            <div class="glass-panel rounded-2xl p-4 text-center">
+                                <div class="text-3xl font-bold text-neon-blue">24/7</div>
+                                <div class="text-sm text-gray-400">Support</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Content - Owner Image -->
+                    <div class="relative flex justify-center">
+                        <div class="relative w-80 h-80 md:w-96 md:h-96">
+                            <div class="absolute inset-0 rounded-full bg-gradient-to-r from-neon-pink via-neon-purple to-neon-blue animate-spin-slow opacity-50 blur-xl"></div>
+                            <div class="relative w-full h-full rounded-full overflow-hidden border-4 border-yellow-400/50 owner-avatar">
+                                <img src="https://images.unsplash.com/photo-1493225255756-d9584f8606e9?w=800" alt="Omotayo Fanegan - Stage Performance" class="w-full h-full object-cover">
+                            </div>
+                            <div class="absolute -bottom-4 left-1/2 -translate-x-1/2 bg-black/80 backdrop-blur px-6 py-2 rounded-full border border-yellow-400/30">
+                                <span class="text-yellow-400 font-bold"><i class="fas fa-crown mr-2"></i>Omotayo Fanegan</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Owner Studio Section -->
+            <div class="max-w-7xl mx-auto px-4 py-20">
+                <div class="glass-panel rounded-3xl p-8 md:p-12 border border-yellow-400/20">
+                    <div class="grid md:grid-cols-2 gap-12 items-center">
+                        <div class="order-2 md:order-1">
+                            <img src="https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?w=800" alt="Omotayo Fanegan - Studio Session" class="w-full h-auto studio-image shadow-2xl">
+                        </div>
+                        <div class="order-1 md:order-2">
+                            <div class="flex items-center gap-3 mb-4">
+                                <span class="px-3 py-1 bg-yellow-400/20 text-yellow-400 rounded-full text-sm font-bold">BEHIND THE SCENES</span>
+                            </div>
+                            <h2 class="font-orbitron text-4xl font-bold mb-6">
+                                <span class="owner-text">The Creative Vision</span>
+                            </h2>
+                            <p class="text-gray-300 text-lg mb-6 leading-relaxed">
+                                Omotayo Fanegan brings years of entertainment industry experience to T.Best. 
+                                From studio sessions to live performances, every aspect of this platform reflects 
+                                a commitment to excellence and innovation.
+                            </p>
+                            <div class="space-y-4">
+                                <div class="flex items-center gap-3">
+                                    <i class="fas fa-check-circle text-yellow-400"></i>
+                                    <span>Professional Music Production</span>
+                                </div>
+                                <div class="flex items-center gap-3">
+                                    <i class="fas fa-check-circle text-yellow-400"></i>
+                                    <span>Live Performance Expertise</span>
+                                </div>
+                                <div class="flex items-center gap-3">
+                                    <i class="fas fa-check-circle text-yellow-400"></i>
+                                    <span>Digital Entertainment Pioneer</span>
+                                </div>
+                            </div>
+                            <button onclick="showSection('owner')" class="mt-8 px-8 py-3 bg-yellow-400/20 border border-yellow-400 text-yellow-400 rounded-full font-bold hover:bg-yellow-400 hover:text-black transition-all">
+                                Learn More About the Founder
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- OWNER PROFILE SECTION -->
+        <section id="owner" class="section hidden">
+            <div class="max-w-6xl mx-auto px-4 py-12">
+                <!-- Profile Header -->
+                <div class="glass-panel rounded-3xl p-8 mb-8 border-2 border-yellow-400/30 relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-64 h-64 bg-yellow-400/10 rounded-full blur-3xl"></div>
+                    
+                    <div class="relative z-10 flex flex-col md:flex-row items-center gap-8">
+                        <div class="relative">
+                            <div class="w-48 h-48 rounded-full overflow-hidden border-4 border-yellow-400 owner-avatar">
+                                <img src="https://images.unsplash.com/photo-1493225255756-d9584f8606e9?w=400" alt="Omotayo Fanegan" class="w-full h-full object-cover">
+                            </div>
+                            <div class="absolute bottom-0 right-0 bg-yellow-400 text-black w-12 h-12 rounded-full flex items-center justify-center text-xl border-4 border-black">
+                                <i class="fas fa-crown"></i>
+                            </div>
+                        </div>
+                        
+                        <div class="text-center md:text-left flex-1">
+                            <div class="flex items-center justify-center md:justify-start gap-3 mb-2">
+                                <h1 class="font-orbitron text-4xl md:text-5xl font-bold owner-text">Omotayo Fanegan</h1>
+                                <span class="px-3 py-1 bg-yellow-400 text-black text-sm font-bold rounded-full">FOUNDER & CEO</span>
+                            </div>
+                            <p class="text-xl text-gray-400 mb-4">Entertainment Entrepreneur & Digital Visionary</p>
+                            
+                            <div class="flex flex-wrap gap-4 justify-center md:justify-start mb-6">
+                                <a href="#" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-neon-pink transition-colors"><i class="fab fa-instagram"></i></a>
+                                <a href="#" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-neon-blue transition-colors"><i class="fab fa-twitter"></i></a>
+                                <a href="#" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-neon-purple transition-colors"><i class="fab fa-youtube"></i></a>
+                                <a href="#" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-neon-green transition-colors"><i class="fab fa-spotify"></i></a>
+                            </div>
+                            
+                            <div class="grid grid-cols-3 gap-4 max-w-md">
+                                <div class="text-center p-3 bg-white/5 rounded-xl">
+                                    <div class="text-2xl font-bold text-yellow-400">10+</div>
+                                    <div class="text-xs text-gray-400">Years Experience</div>
+                                </div>
+                                <div class="text-center p-3 bg-white/5 rounded-xl">
+                                    <div class="text-2xl font-bold text-yellow-400">5M+</div>
+                                    <div class="text-xs text-gray-400">Followers</div>
+                                </div>
+                                <div class="text-center p-3 bg-white/5 rounded-xl">
+                                    <div class="text-2xl font-bold text-yellow-400">50+</div>
+                                    <div class="text-xs text-gray-400">Awards</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Gallery -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                    <div class="glass-panel rounded-2xl overflow-hidden group">
+                        <div class="relative aspect-[4/3] overflow-hidden">
+                            <img src="https://images.unsplash.com/photo-1493225255756-d9584f8606e9?w=800" alt="Stage Performance" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-6">
+                                <div>
+                                    <h3 class="font-bold text-xl text-yellow-400">Live Performance</h3>
+                                    <p class="text-sm text-gray-300">Main Stage 2024</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="glass-panel rounded-2xl overflow-hidden group">
+                        <div class="relative aspect-[4/3] overflow-hidden">
+                            <img src="https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?w=800" alt="Studio Session" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-6">
+                                <div>
+                                    <h3 class="font-bold text-xl text-yellow-400">Studio Session</h3>
+                                    <p class="text-sm text-gray-300">Recording New Album</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bio -->
+                <div class="glass-panel rounded-2xl p-8">
+                    <h2 class="font-orbitron text-2xl font-bold mb-6 text-yellow-400">About the Founder</h2>
+                    <div class="prose prose-invert max-w-none text-gray-300 leading-relaxed space-y-4">
+                        <p>
+                            Omotayo Fanegan is a visionary entertainment entrepreneur who founded T.Best Entertainment 
+                            with a mission to revolutionize how creators monetize their content and connect with audiences worldwide.
+                        </p>
+                        <p>
+                            With over a decade of experience in music production, live performance, and digital media, 
+                            Omotayo has built T.Best into a premier destination for gaming, streaming, and content creation. 
+                            The platform reflects his commitment to empowering creators and providing world-class entertainment experiences.
+                        </p>
+                        <p>
+                            Under his leadership, T.Best has distributed over $2.5 million in winnings to players and 
+                            provided a home for over 50,000 active streamers. The platform continues to innovate at the 
+                            intersection of entertainment and technology.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ADMIN PANEL (Owner Only) -->
+        <section id="admin" class="section hidden">
+            <div class="max-w-7xl mx-auto px-4 py-8">
+                <div class="flex justify-between items-center mb-8">
+                    <div>
+                        <h2 class="font-orbitron text-4xl font-bold owner-text mb-2">
+                            <i class="fas fa-crown mr-3"></i>Owner Admin Panel
+                        </h2>
+                        <p class="text-gray-400">Welcome back, Omotayo Fanegan. Full system control enabled.</p>
+                    </div>
+                    <div class="flex gap-3">
+                        <button class="px-4 py-2 bg-yellow-400/20 text-yellow-400 rounded-lg font-bold border border-yellow-400/30">
+                            <i class="fas fa-shield-alt mr-2"></i>Security: Active
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Admin Stats -->
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+                    <div class="glass-panel rounded-2xl p-6 border-l-4 border-yellow-400">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <p class="text-gray-400 text-sm">Total Revenue</p>
+                                <h3 class="text-3xl font-bold text-white mt-1">$4.2M</h3>
+                            </div>
+                            <i class="fas fa-dollar-sign text-yellow-400 text-2xl"></i>
+                        </div>
+                        <div class="mt-2 text-green-400 text-sm"><i class="fas fa-arrow-up mr-1"></i>+12% this month</div>
+                    </div>
+                    
+                    <div class="glass-panel rounded-2xl p-6 border-l-4 border-neon-pink">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <p class="text-gray-400 text-sm">Active Users</p>
+                                <h3 class="text-3xl font-bold text-white mt-1">125,420</h3>
+                            </div>
+                            <i class="fas fa-users text-neon-pink text-2xl"></i>
+                        </div>
+                        <div class="mt-2 text-green-400 text-sm"><i class="fas fa-arrow-up mr-1"></i>+5% this week</div>
+                    </div>
+                    
+                    <div class="glass-panel rounded-2xl p-6 border-l-4 border-neon-blue">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <p class="text-gray-400 text-sm">Pending Withdrawals</p>
+                                <h3 class="text-3xl font-bold text-white mt-1">$89,450</h3>
+                            </div>
+                            <i class="fas fa-clock text-neon-blue text-2xl"></i>
+                        </div>
+                        <div class="mt-2 text-yellow-400 text-sm">24 requests pending</div>
+                    </div>
+                    
+                    <div class="glass-panel rounded-2xl p-6 border-l-4 border-neon-green">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <p class="text-gray-400 text-sm">Server Status</p>
+                                <h3 class="text-3xl font-bold text-green-400 mt-1">Online</h3>
+                            </div>
+                            <i class="fas fa-server text-neon-green text-2xl"></i>
+                        </div>
+                        <div class="mt-2 text-gray-400 text-sm">99.9% uptime</div>
+                    </div>
+                </div>
+
+                <!-- Management Tools -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="glass-panel rounded-2xl p-6">
+                        <h3 class="font-bold text-xl mb-4 text-yellow-400">Quick Actions</h3>
+                        <div class="space-y-3">
+                            <button class="w-full p-4 bg-white/5 rounded-xl hover:bg-white/10 transition-all flex items-center justify-between group">
+                                <div class="flex items-center gap-3">
+                                    <i class="fas fa-user-shield text-neon-pink"></i>
+                                    <span>Manage Users</span>
+                                </div>
+                                <i class="fas fa-chevron-right opacity-0 group-hover:opacity-100 transition-opacity"></i>
+                            </button>
+                            <button class="w-full p-4 bg-white/5 rounded-xl hover:bg-white/10 transition-all flex items-center justify-between group">
+                                <div class="flex items-center gap-3">
+                                    <i class="fas fa-gamepad text-neon-yellow"></i>
+                                    <span>Game Settings</span>
+                                </div>
+                                <i class="fas fa-chevron-right opacity-0 group-hover:opacity-100 transition-opacity"></i>
+                            </button>
+                            <button class="w-full p-4 bg-white/5 rounded-xl hover:bg-white/10 transition-all flex items-center justify-between group">
+                                <div class="flex items-center gap-3">
+                                    <i class="fas fa-money-bill-wave text-neon-green"></i>
+                                    <span>Process Withdrawals</span>
+                                </div>
+                                <span class="bg-red-500 text-white text-xs px-2 py-1 rounded-full">24</span>
+                            </button>
+                            <button class="w-full p-4 bg-white/5 rounded-xl hover:bg-white/10 transition-all flex items-center justify-between group">
+                                <div class="flex items-center gap-3">
+                                    <i class="fas fa-bullhorn text-neon-purple"></i>
+                                    <span>Send Announcement</span>
+                                </div>
+                                <i class="fas fa-chevron-right opacity-0 group-hover:opacity-100 transition-opacity"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="glass-panel rounded-2xl p-6">
+                        <h3 class="font-bold text-xl mb-4 text-yellow-400">System Logs</h3>
+                        <div class="space-y-2 max-h-64 overflow-y-auto">
+                            <div class="p-3 bg-white/5 rounded-lg text-sm">
+                                <div class="flex justify-between text-gray-400 text-xs mb-1">
+                                    <span>Just now</span>
+                                    <span class="text-green-400">Success</span>
+                                </div>
+                                <div>User withdrawal processed: $500</div>
+                            </div>
+                            <div class="p-3 bg-white/5 rounded-lg text-sm">
+                                <div class="flex justify-between text-gray-400 text-xs mb-1">
+                                    <span>5 min ago</span>
+                                    <span class="text-blue-400">Info</span>
+                                </div>
+                                <div>New user registration spike detected</div>
+                            </div>
+                            <div class="p-3 bg-white/5 rounded-lg text-sm">
+                                <div class="flex justify-between text-gray-400 text-xs mb-1">
+                                    <span>12 min ago</span>
+                                    <span class="text-yellow-400">Warning</span>
+                                </div>
+                                <div>High server load on game instances</div>
+                            </div>
+                            <div class="p-3 bg-white/5 rounded-lg text-sm">
+                                <div class="flex justify-between text-gray-400 text-xs mb-1">
+                                    <span>1 hour ago</span>
+                                    <span class="text-green-400">Success</span>
+                                </div>
+                                <div>Database backup completed</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Other Sections (Games, Wallet, Live, etc.) -->
+        <section id="games" class="section hidden">
+            <div class="max-w-7xl mx-auto px-4 py-8">
+                <div class="glass-panel rounded-2xl p-6 mb-8">
+                    <div class="flex flex-col md:flex-row justify-between items-center gap-4">
+                        <div>
+                            <h2 class="font-orbitron text-3xl font-bold mb-2">Gaming Center</h2>
+                            <p class="text-gray-400">Play smart, win big. Real money games with instant payouts.</p>
+                        </div>
+                        <div class="flex bg-white/5 rounded-full p-1">
+                            <button onclick="switchAccount('real')" id="realAccountBtn" class="px-6 py-2 rounded-full font-bold transition-all bg-neon-green text-black">Real Account</button>
+                            <button onclick="switchAccount('demo')" id="demoAccountBtn" class="px-6 py-2 rounded-full font-bold transition-all text-gray-400 hover:text-white">Demo ($100,000)</button>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
+                        <div class="wallet-card rounded-2xl p-6" id="realWalletCard">
+                            <div class="flex justify-between items-start mb-4">
+                                <div>
+                                    <p class="text-sm text-gray-400 mb-1">Real Balance</p>
+                                    <h3 class="text-3xl font-mono font-bold text-neon-green" id="realBalanceDisplay">$0.00</h3>
+                                </div>
+                                <i class="fas fa-wallet text-2xl text-neon-green"></i>
+                            </div>
+                            <div class="flex gap-2">
+                                <button onclick="showSection('wallet')" class="flex-1 bg-neon-green text-black py-2 rounded-lg font-bold hover:opacity-90">Deposit</button>
+                                <button onclick="showSection('wallet')" class="flex-1 border border-neon-green text-neon-green py-2 rounded-lg font-bold hover:bg-neon-green/10">Withdraw</button>
+                            </div>
+                        </div>
+                        
+                        <div class="wallet-card demo-wallet rounded-2xl p-6" id="demoWalletCard">
+                            <div class="flex justify-between items-start mb-4">
+                                <div>
+                                    <p class="text-sm text-gray-400 mb-1">Demo Balance</p>
+                                    <h3 class="text-3xl font-mono font-bold text-neon-yellow" id="demoBalanceDisplay">$100,000.00</h3>
+                                </div>
+                                <i class="fas fa-coins text-2xl text-neon-yellow"></i>
+                            </div>
+                            <div class="text-sm text-gray-400">Practice with virtual money</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Games Grid -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <!-- Slots -->
+                    <div class="game-card rounded-3xl p-8 border-neon-yellow/30">
+                        <div class="flex justify-between items-center mb-6">
+                            <div>
+                                <h3 class="font-orbitron text-2xl font-bold text-neon-yellow">Lucky Slots</h3>
+                                <p class="text-sm text-gray-400">Match 3 to win up to 100x</p>
+                            </div>
+                            <div class="text-right">
+                                <div class="text-xs text-gray-400">Current Bet</div>
+                                <div class="font-mono font-bold text-xl">$<span id="slotsBet">10</span></div>
+                            </div>
+                        </div>
+
+                        <div class="slot-machine rounded-2xl p-8 mb-6">
+                            <div class="grid grid-cols-3 gap-4 mb-4">
+                                <div class="slot-reel h-24 bg-white text-black text-4xl flex items-center justify-center rounded-lg" id="reel1">🎰</div>
+                                <div class="slot-reel h-24 bg-white text-black text-4xl flex items-center justify-center rounded-lg" id="reel2">🎰</div>
+                                <div class="slot-reel h-24 bg-white text-black text-4xl flex items-center justify-center rounded-lg" id="reel3">🎰</div>
+                            </div>
+                            <div id="slotsResult" class="text-center font-bold text-xl h-8"></div>
+                        </div>
+
+                        <div class="flex gap-4 mb-4">
+                            <button onclick="changeBet('slots', -10)" class="px-4 py-2 bg-white/10 rounded-lg hover:bg-white/20">-</button>
+                            <button onclick="spinSlots()" class="flex-1 bg-gradient-to-r from-neon-yellow to-orange-500 text-black font-bold py-3 rounded-xl hover:shadow-lg transition-all text-lg">
+                                <i class="fas fa-sync-alt mr-2"></i>SPIN
+                            </button>
+                            <button onclick="changeBet('slots', 10)" class="px-4 py-2 bg-white/10 rounded-lg hover:bg-white/20">+</button>
+                        </div>
+                    </div>
+
+                    <!-- Crash -->
+                    <div class="game-card rounded-3xl p-8 border-neon-green/30">
+                        <div class="flex justify-between items-center mb-6">
+                            <div>
+                                <h3 class="font-orbitron text-2xl font-bold text-neon-green">Moon Crash</h3>
+                                <p class="text-sm text-gray-400">Cash out before the crash!</p>
+                            </div>
+                            <div class="text-right">
+                                <div class="text-xs text-gray-400">Current Bet</div>
+                                <div class="font-mono font-bold text-xl">$<span id="crashBet">50</span></div>
+                            </div>
+                        </div>
+
+                        <div class="crash-graph rounded-2xl p-6 mb-6 h-48 flex items-end justify-center relative overflow-hidden bg-black/40">
+                            <canvas id="crashCanvas" class="absolute inset-0 w-full h-full"></canvas>
+                            <div id="crashMultiplier" class="relative z-10 text-5xl font-bold font-mono text-neon-green">1.00x</div>
+                        </div>
+
+                        <div class="flex gap-4 mb-4">
+                            <input type="number" id="crashAutoCashout" placeholder="Auto Cashout" class="w-24 bg-white/5 border border-white/10 rounded-lg px-3 text-center" value="2.0">
+                            <button onclick="startCrash()" id="crashBtn" class="flex-1 bg-neon-green text-black font-bold py-3 rounded-xl hover:shadow-lg transition-all text-lg">START</button>
+                            <button onclick="cashoutCrash()" id="cashoutBtn" class="flex-1 bg-red-500 text-white font-bold py-3 rounded-xl hidden animate-pulse">
+                                CASH OUT $<span id="cashoutAmount">0</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="wallet" class="section hidden">
+            <div class="max-w-5xl mx-auto px-4 py-8">
+                <h2 class="font-orbitron text-4xl font-bold mb-8 text-center gradient-text">Wallet & Banking</h2>
+                
+                <div class="glass-panel rounded-3xl p-8">
+                    <div class="flex gap-4 mb-8 border-b border-white/10 pb-4">
+                        <button onclick="showWalletTab('deposit')" id="depositTab" class="flex-1 py-3 text-center font-bold text-lg border-b-2 border-neon-green text-neon-green">
+                            <i class="fas fa-arrow-down mr-2"></i>Deposit
+                        </button>
+                        <button onclick="showWalletTab('withdraw')" id="withdrawTab" class="flex-1 py-3 text-center font-bold text-lg border-b-2 border-transparent text-gray-400 hover:text-white">
+                            <i class="fas fa-arrow-up mr-2"></i>Withdraw
+                        </button>
+                    </div>
+
+                    <div id="depositForm" class="space-y-6">
+                        <div>
+                            <label class="block text-sm font-medium mb-3">Select Payment Method</label>
+                            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                                <div class="payment-method selected bg-white/5 rounded-xl p-4 text-center cursor-pointer border-2 border-neon-blue" onclick="selectPayment(this, 'card')">
+                                    <i class="fas fa-credit-card text-2xl mb-2 text-neon-blue"></i>
+                                    <div class="text-sm font-semibold">Card</div>
+                                </div>
+                                <div class="payment-method bg-white/5 rounded-xl p-4 text-center cursor-pointer border-2 border-transparent hover:border-neon-yellow" onclick="selectPayment(this, 'crypto')">
+                                    <i class="fab fa-bitcoin text-2xl mb-2 text-neon-yellow"></i>
+                                    <div class="text-sm font-semibold">Crypto</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium mb-2">Amount (USD)</label>
+                            <div class="relative">
+                                <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-xl">$</span>
+                                <input type="number" id="depositAmount" class="w-full bg-white/5 border border-white/10 rounded-xl pl-10 pr-4 py-4 text-2xl font-mono focus:outline-none focus:border-neon-green" placeholder="0.00">
+                            </div>
+                        </div>
+
+                        <button onclick="processDeposit()" class="w-full bg-gradient-to-r from-neon-green to-green-600 text-black font-bold py-4 rounded-xl text-lg hover:shadow-lg transition-all">
+                            <i class="fas fa-lock mr-2"></i>Secure Deposit
+                        </button>
+                    </div>
+
+                    <div id="withdrawForm" class="space-y-6 hidden">
+                        <div class="bg-yellow-500/10 border border-yellow-500/30 rounded-xl p-4">
+                            <div class="flex items-start gap-3">
+                                <i class="fas fa-exclamation-triangle text-yellow-500 mt-1"></i>
+                                <div class="text-sm">
+                                    <div class="font-semibold text-yellow-400 mb-1">Important</div>
+                                    <div class="text-gray-300">Minimum withdrawal: $20. Maximum: $50,000 per day.</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <button onclick="processWithdrawal()" class="w-full bg-gradient-to-r from-neon-pink to-red-600 text-white font-bold py-4 rounded-xl text-lg hover:shadow-lg transition-all">
+                            Request Withdrawal
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="live" class="section hidden">
+            <div class="max-w-7xl mx-auto px-4 py-8">
+                <h2 class="font-orbitron text-4xl font-bold mb-8 text-red-500">
+                    <i class="fas fa-circle text-sm animate-pulse mr-2"></i>Live Streams
+                </h2>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6" id="liveStreamsGrid"></div>
+            </div>
+        </section>
+
+        <!-- OWNER LOGIN SECTION -->
+        <section id="login" class="section hidden min-h-screen flex items-center justify-center px-4">
+            <div class="max-w-md w-full space-y-8">
+                <!-- Regular User Login -->
+                <div class="glass-panel rounded-3xl p-8">
+                    <div class="text-center mb-8">
+                        <h2 class="font-orbitron text-3xl font-bold mb-2">Welcome Back</h2>
+                        <p class="text-gray-400">Sign in to start playing</p>
+                    </div>
+                    <form onsubmit="handleLogin(event)" class="space-y-6">
+                        <input type="email" required class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:border-neon-pink" placeholder="Email">
+                        <input type="password" required class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:border-neon-pink" placeholder="Password">
+                        <button type="submit" class="w-full bg-gradient-to-r from-neon-pink to-neon-purple py-3 rounded-xl font-bold text-lg hover:shadow-lg transition-all">
+                            Sign In
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Owner Login Box -->
+                <div class="owner-badge rounded-3xl p-8 mt-8">
+                    <div class="text-center mb-6">
+                        <i class="fas fa-crown text-5xl text-yellow-400 mb-4"></i>
+                        <h2 class="font-orbitron text-2xl font-bold text-yellow-400 mb-2">Owner Access</h2>
+                        <p class="text-gray-300 text-sm">Restricted to Omotayo Fanegan only</p>
+                    </div>
+                    
+                    <div class="bg-black/30 rounded-xl p-4 mb-4 text-center">
+                        <div class="text-xs text-gray-400 mb-1">Default Owner Credentials</div>
+                        <div class="font-mono text-yellow-400 text-sm">Username: omotayo.fanegan@tbest.com</div>
+                        <div class="font-mono text-yellow-400 text-sm">Password: TBestOwner2024!</div>
+                    </div>
+
+                    <form onsubmit="handleOwnerLogin(event)" class="space-y-4">
+                        <input type="email" id="ownerEmail" required class="w-full bg-black/30 border border-yellow-400/30 rounded-xl px-4 py-3 focus:outline-none focus:border-yellow-400 text-yellow-400 placeholder-yellow-400/50" placeholder="Owner Email">
+                        <input type="password" id="ownerPassword" required class="w-full bg-black/30 border border-yellow-400/30 rounded-xl px-4 py-3 focus:outline-none focus:border-yellow-400 text-yellow-400 placeholder-yellow-400/50" placeholder="Owner Password">
+                        <button type="submit" class="w-full bg-gradient-to-r from-yellow-600 to-yellow-400 text-black py-3 rounded-xl font-bold text-lg hover:shadow-lg hover:shadow-yellow-400/50 transition-all">
+                            <i class="fas fa-crown mr-2"></i>Access Owner Panel
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Toast -->
+    <div id="toast" class="fixed bottom-4 right-4 z-[70] transform translate-y-20 opacity-0 transition-all duration-300">
+        <div class="glass-panel rounded-xl px-6 py-4 flex items-center space-x-3 border-l-4 border-neon-green">
+            <i class="fas fa-check-circle text-neon-green text-xl"></i>
+            <span id="toastMessage">Operation successful!</span>
+        </div>
+    </div>
+
+    <script>
+        // State
+        let currentUser = null;
+        let isOwner = false;
+        let accountType = 'real';
+        let balances = { real: 0, demo: 100000, totalWon: 0 };
+        let currentBet = { slots: 10, crash: 50 };
+        let crashGame = null;
+
+        // Owner Credentials (In production, this would be server-side)
+        const OWNER_CREDENTIALS = {
+            email: 'omotayo.fanegan@tbest.com',
+            password: 'TBestOwner2024!'
+        };
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            updateBalanceDisplay();
+            renderLiveStreams();
+            initCrashCanvas();
+        });
+
+        function showSection(sectionId) {
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.add('hidden');
+                section.classList.remove('active');
+            });
+            document.getElementById(sectionId).classList.remove('hidden');
+            document.getElementById(sectionId).classList.add('active');
+            
+            // Adjust padding if owner bar is visible
+            const ownerBar = document.getElementById('ownerBar');
+            const mainNav = document.getElementById('mainNav');
+            const mainContent = document.getElementById('mainContent');
+            
+            if (isOwner) {
+                mainNav.style.top = '40px';
+                mainContent.style.paddingTop = '104px';
+            } else {
+                mainNav.style.top = '0';
+                mainContent.style.paddingTop = '64px';
+            }
+        }
+
+        // Owner Authentication
+        function handleOwnerLogin(e) {
+            e.preventDefault();
+            const email = document.getElementById('ownerEmail').value;
+            const password = document.getElementById('ownerPassword').value;
+            
+            if (email === OWNER_CREDENTIALS.email && password === OWNER_CREDENTIALS.password) {
+                isOwner = true;
+                currentUser = { name: 'Omotayo Fanegan', email: email, role: 'owner' };
+                
+                // Show owner UI
+                document.getElementById('ownerBar').classList.remove('hidden');
+                document.getElementById('ownerIndicator').classList.remove('hidden');
+                document.getElementById('authBtn').innerHTML = `<img src="https://images.unsplash.com/photo-1493225255756-d9584f8606e9?w=150" class="w-8 h-8 rounded-full border-2 border-yellow-400">`;
+                
+                // Adjust layout
+                document.getElementById('mainNav').style.top = '40px';
+                document.getElementById('mainContent').style.paddingTop = '104px';
+                
+                showToast('Welcome back, Owner Omotayo Fanegan!', 'success');
+                showSection('admin');
+            } else {
+                showToast('Invalid owner credentials!', 'error');
+            }
+        }
+
+        function logoutOwner() {
+            isOwner = false;
+            currentUser = null;
+            document.getElementById('ownerBar').classList.add('hidden');
+            document.getElementById('ownerIndicator').classList.add('hidden');
+            document.getElementById('authBtn').innerHTML = `<i class="fas fa-user-circle text-2xl"></i>`;
+            document.getElementById('mainNav').style.top = '0';
+            document.getElementById('mainContent').style.paddingTop = '64px';
+            showToast('Logged out from owner account', 'success');
+            showSection('home');
+        }
+
+        function handleLogin(e) {
+            e.preventDefault();
+            currentUser = { name: 'User', email: 'user@example.com' };
+            document.getElementById('authBtn').innerHTML = `<img src="https://i.pravatar.cc/150?img=13" class="w-8 h-8 rounded-full border-2 border-neon-pink">`;
+            document.getElementById('navBalance').classList.remove('hidden');
+            showSection('home');
+            showToast('Welcome to T.Best Entertainment!');
+        }
+
+        // Game Functions
+        function switchAccount(type) {
+            accountType = type;
+            document.getElementById('realAccountBtn').className = type === 'real' 
+                ? 'px-6 py-2 rounded-full font-bold transition-all bg-neon-green text-black'
+                : 'px-6 py-2 rounded-full font-bold transition-all text-gray-400 hover:text-white';
+            document.getElementById('demoAccountBtn').className = type === 'demo'
+                ? 'px-6 py-2 rounded-full font-bold transition-all bg-neon-yellow text-black'
+                : 'px-6 py-2 rounded-full font-bold transition-all text-gray-400 hover:text-white';
+            updateBalanceDisplay();
+        }
+
+        function updateBalanceDisplay() {
+            const realBal = balances.real.toFixed(2);
+            const demoBal = balances.demo.toFixed(2);
+            document.getElementById('navBalanceAmount').textContent = accountType === 'real' ? `$${realBal}` : `$${demoBal}`;
+            document.getElementById('realBalanceDisplay').textContent = `$${realBal}`;
+            document.getElementById('demoBalanceDisplay').textContent = `$${demoBal}`;
+        }
+
+        function changeBet(game, delta) {
+            const current = game === 'slots' ? currentBet.slots : currentBet.crash;
+            const newBet = Math.max(1, Math.min(1000, current + delta));
+            if (game === 'slots') {
+                currentBet.slots = newBet;
+                document.getElementById('slotsBet').textContent = newBet;
+            } else {
+                currentBet.crash = newBet;
+                document.getElementById('crashBet').textContent = newBet;
+            }
+        }
+
+        function spinSlots() {
+            const bet = currentBet.slots;
+            if (accountType === 'real' && bet > balances.real) {
+                showToast('Insufficient balance!', 'error');
+                return;
+            }
+            
+            if (accountType === 'real') balances.real -= bet;
+            else balances.demo -= bet;
+            updateBalanceDisplay();
+            
+            const reels = ['🍒', '🍋', '💎', '7️⃣', '🎰', '💰'];
+            let spins = 0;
+            const interval = setInterval(() => {
+                for (let i = 1; i <= 3; i++) {
+                    document.getElementById(`reel${i}`).textContent = reels[Math.floor(Math.random() * reels.length)];
+                }
+                spins++;
+                if (spins > 10) {
+                    clearInterval(interval);
+                    finalizeSlots();
+                }
+            }, 100);
+        }
+
+        function finalizeSlots() {
+            const reels = ['🍒', '🍋', '💎', '7️⃣', '🎰', '💰'];
+            const results = Array(3).fill(0).map(() => reels[Math.floor(Math.random() * reels.length)]);
+            results.forEach((r, i) => document.getElementById(`reel${i+1}`).textContent = r);
+            
+            let win = 0;
+            if (results[0] === results[1] && results[1] === results[2]) {
+                const multipliers = { '🍒': 3, '🍋': 5, '💎': 10, '7️⃣': 50, '🎰': 100, '💰': 200 };
+                win = currentBet.slots * multipliers[results[0]];
+                document.getElementById('slotsResult').textContent = `JACKPOT! +$${win}`;
+            } else if (results[0] === results[1] || results[1] === results[2] || results[0] === results[2]) {
+                win = currentBet.slots * 2;
+                document.getElementById('slotsResult').textContent = `Nice! +$${win}`;
+            } else {
+                document.getElementById('slotsResult').textContent = 'Try again!';
+            }
+            
+            if (win > 0) {
+                if (accountType === 'real') {
+                    balances.real += win;
+                    balances.totalWon += win;
+                } else balances.demo += win;
+                updateBalanceDisplay();
+                showToast(`You won $${win}!`);
+            }
+        }
+
+        function initCrashCanvas() {
+            const canvas = document.getElementById('crashCanvas');
+            if (canvas) {
+                canvas.width = canvas.offsetWidth;
+                canvas.height = canvas.offsetHeight;
+            }
+        }
+
+        function startCrash() {
+            if (crashGame) return;
+            const bet = currentBet.crash;
+            if (accountType === 'real' && bet > balances.real) {
+                showToast('Insufficient balance!', 'error');
+                return;
+            }
+            
+            if (accountType === 'real') balances.real -= bet;
+            else balances.demo -= bet;
+            updateBalanceDisplay();
+            
+            document.getElementById('crashBtn').classList.add('hidden');
+            document.getElementById('cashoutBtn').classList.remove('hidden');
+            
+            let multiplier = 1.0;
+            const crashPoint = 1.1 + Math.random() * 5;
+            
+            crashGame = setInterval(() => {
+                multiplier += 0.05;
+                document.getElementById('crashMultiplier').textContent = multiplier.toFixed(2) + 'x';
+                document.getElementById('cashoutAmount').textContent = (bet * multiplier).toFixed(2);
+                
+                if (multiplier >= crashPoint) {
+                    endCrash(false);
+                }
+            }, 100);
+        }
+
+        function cashoutCrash() {
+            if (!crashGame) return;
+            const multiplier = parseFloat(document.getElementById('crashMultiplier').textContent);
+            const win = currentBet.crash * multiplier;
+            if (accountType === 'real') {
+                balances.real += win;
+                balances.totalWon += win;
+            } else balances.demo += win;
+            updateBalanceDisplay();
+            endCrash(true);
+            showToast(`Cashed out $${win.toFixed(2)}!`);
+        }
+
+        function endCrash(won) {
+            clearInterval(crashGame);
+            crashGame = null;
+            document.getElementById('crashBtn').classList.remove('hidden');
+            document.getElementById('cashoutBtn').classList.add('hidden');
+            document.getElementById('crashMultiplier').textContent = '1.00x';
+            if (!won) showToast('Crashed!', 'error');
+        }
+
+        // Wallet Functions
+        function showWalletTab(tab) {
+            document.getElementById('depositForm').classList.toggle('hidden', tab !== 'deposit');
+            document.getElementById('withdrawForm').classList.toggle('hidden', tab !== 'withdraw');
+            document.getElementById('depositTab').className = tab === 'deposit' ? 'flex-1 py-3 text-center font-bold text-lg border-b-2 border-neon-green text-neon-green' : 'flex-1 py-3 text-center font-bold text-lg border-b-2 border-transparent text-gray-400 hover:text-white';
+            document.getElementById('withdrawTab').className = tab === 'withdraw' ? 'flex-1 py-3 text-center font-bold text-lg border-b-2 border-neon-pink text-neon-pink' : 'flex-1 py-3 text-center font-bold text-lg border-b-2 border-transparent text-gray-400 hover:text-white';
+        }
+
+        function selectPayment(el, method) {
+            document.querySelectorAll('.payment-method').forEach(pm => {
+                pm.classList.remove('selected', 'border-neon-blue', 'border-neon-yellow');
+                pm.classList.add('border-transparent');
+            });
+            el.classList.add('selected', method === 'card' ? 'border-neon-blue' : 'border-neon-yellow');
+            el.classList.remove('border-transparent');
+        }
+
+        function processDeposit() {
+            const amount = parseFloat(document.getElementById('depositAmount').value);
+            if (!amount || amount < 10) {
+                showToast('Minimum deposit is $10', 'error');
+                return;
+            }
+            balances.real += amount;
+            updateBalanceDisplay();
+            showToast(`Successfully deposited $${amount.toFixed(2)}!`);
+            document.getElementById('depositAmount').value = '';
+        }
+
+        function processWithdrawal() {
+            showToast('Withdrawal request submitted!', 'success');
+        }
+
+        // Live Streams
+        function renderLiveStreams() {
+            const streams = [
+                { user: 'ProGamer_X', title: 'High Stakes Gaming!', viewers: '12.5K', image: 'https://i.pravatar.cc/150?img=20' },
+                { user: 'DJ_Sarah', title: 'Live Music Mix', viewers: '8.2K', image: 'https://i.pravatar.cc/150?img=21' },
+                { user: 'CryptoKing', title: 'Trading Live', viewers: '5.1K', image: 'https://i.pravatar.cc/150?img=22' },
+                { user: 'ArtMaster', title: 'Creating Digital Art', viewers: '3.8K', image: 'https://i.pravatar.cc/150?img=23' }
+            ];
+            
+            const grid = document.getElementById('liveStreamsGrid');
+            if (grid) {
+                grid.innerHTML = streams.map(s => `
+                    <div class="glass-panel rounded-2xl overflow-hidden cursor-pointer hover-scale group">
+                        <div class="relative aspect-video bg-gray-800">
+                            <div class="absolute top-2 left-2 live-badge px-2 py-1 rounded text-xs font-bold flex items-center gap-1">
+                                <i class="fas fa-circle text-[8px]"></i> LIVE
+                            </div>
+                            <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 to-transparent p-4">
+                                <div class="font-semibold text-sm">${s.user}</div>
+                                <div class="text-xs text-gray-400">${s.title}</div>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+            }
+        }
+
+        function toggleLiveModal() {
+            showToast('Live streaming feature - configure OBS settings', 'success');
+        }
+
+        function toggleUploadModal() {
+            showToast('Upload feature ready', 'success');
+        }
+
+        // Toast
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            document.getElementById('toastMessage').textContent = message;
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            setTimeout(() => toast.classList.add('translate-y-20', 'opacity-0'), 3000);
+        }
+    </script>
+</body>
+</html>
