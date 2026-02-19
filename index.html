@@ -1,195 +1,195 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mini TikTok</title>
-  <style>
-    /* Reset */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: Arial, sans-serif;
-    }
+<meta charset="UTF-8">
+<title>T.Best Entertainment</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    body {
-      display: flex;
-      min-height: 100vh;
-      background-color: #000;
-      color: #fff;
-    }
+<style>
+*{box-sizing:border-box;margin:0;padding:0;font-family:Arial,Helvetica,sans-serif}
+body{background:#000;color:#fff}
+.hidden{display:none}
 
-    /* Sidebar */
-    .sidebar {
-      width: 80px;
-      background-color: #111;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 20px 0;
-    }
+/* Layout */
+header{background:#111;padding:10px 15px;display:flex;justify-content:space-between;align-items:center}
+header h1{font-size:20px;color:#ff0050}
+nav button{background:none;border:none;color:#fff;margin-left:10px;font-size:14px;cursor:pointer}
 
-    .sidebar a {
-      color: #fff;
-      margin: 20px 0;
-      text-decoration: none;
-      font-size: 24px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
+.container{padding:15px;max-width:900px;margin:auto}
+.card{background:#151515;border-radius:10px;padding:15px;margin-bottom:15px}
+input,button,textarea,select{
+  width:100%;padding:10px;margin-top:8px;border-radius:6px;border:none
+}
+button{background:#ff0050;color:#fff;font-weight:bold;cursor:pointer}
+button.secondary{background:#333}
 
-    /* Main content */
-    .main {
-      flex: 1;
-      overflow-y: auto;
-      padding: 20px;
-    }
+.feed video,img,audio{width:100%;border-radius:10px;margin-top:10px}
 
-    /* Video Card */
-    .video-card {
-      position: relative;
-      margin-bottom: 30px;
-      background-color: #222;
-      border-radius: 10px;
-      overflow: hidden;
-    }
+/* Wallet */
+.wallet{display:flex;justify-content:space-between;align-items:center}
+.balance{font-size:18px;font-weight:bold;color:#00ff99}
 
-    .video-card video {
-      width: 100%;
-      height: auto;
-      display: block;
-    }
+/* Chat */
+.chat-box{height:200px;overflow-y:auto;background:#000;border:1px solid #333;padding:10px}
+.chat-msg{margin-bottom:6px;font-size:14px}
 
-    .video-info {
-      position: absolute;
-      bottom: 10px;
-      left: 10px;
-      color: #fff;
-    }
+/* Marketplace */
+.item{border-bottom:1px solid #333;padding:8px 0}
 
-    .video-info h4 {
-      margin-bottom: 5px;
-    }
-
-    .video-actions {
-      position: absolute;
-      right: 10px;
-      bottom: 10px;
-      display: flex;
-      flex-direction: column;
-      gap: 15px;
-      text-align: center;
-    }
-
-    .video-actions div {
-      cursor: pointer;
-    }
-
-    /* Footer (mobile nav) */
-    .footer {
-      display: none;
-    }
-
-    /* Header */
-    .header {
-      width: 100%;
-      padding: 10px 20px;
-      background-color: #111;
-      display: flex;
-      align-items: center;
-      gap: 20px;
-      position: sticky;
-      top: 0;
-      z-index: 10;
-    }
-
-    .header input {
-      flex: 1;
-      padding: 8px 10px;
-      border-radius: 20px;
-      border: none;
-      outline: none;
-    }
-
-    .header h1 {
-      font-size: 24px;
-      color: #fff;
-    }
-
-    /* Responsive */
-    @media (max-width: 768px) {
-      .sidebar {
-        display: none;
-      }
-      .footer {
-        display: flex;
-        position: fixed;
-        bottom: 0;
-        width: 100%;
-        background-color: #111;
-        justify-content: space-around;
-        padding: 10px 0;
-      }
-      .footer a {
-        color: #fff;
-        text-decoration: none;
-        font-size: 24px;
-      }
-    }
-  </style>
+/* Footer nav */
+footer{
+  position:fixed;bottom:0;left:0;width:100%;
+  background:#111;display:flex;justify-content:space-around;padding:8px 0
+}
+footer button{background:none;border:none;color:#fff;font-size:12px}
+</style>
 </head>
+
 <body>
-  <!-- Sidebar -->
-  <div class="sidebar">
-    <a href="#">🏠<span style="font-size:12px;">Home</span></a>
-    <a href="#">🔍<span style="font-size:12px;">Discover</span></a>
-    <a href="#">💌<span style="font-size:12px;">Inbox</span></a>
-    <a href="#">👤<span style="font-size:12px;">Profile</span></a>
+
+<header>
+  <h1>T.Best Entertainment</h1>
+  <nav id="topNav">
+    <button onclick="show('login')">Login</button>
+    <button onclick="show('register')">Register</button>
+  </nav>
+</header>
+
+<div class="container">
+
+<!-- AUTH -->
+<div id="register" class="card hidden">
+  <h3>Register</h3>
+  <input id="rUser" placeholder="Username">
+  <input id="rPass" placeholder="Password" type="password">
+  <button onclick="register()">Create Account</button>
+</div>
+
+<div id="login" class="card hidden">
+  <h3>Login</h3>
+  <input id="lUser" placeholder="Username">
+  <input id="lPass" placeholder="Password" type="password">
+  <button onclick="login()">Login</button>
+</div>
+
+<!-- DASHBOARD -->
+<div id="dashboard" class="hidden">
+
+  <div class="card wallet">
+    <div>Wallet Balance</div>
+    <div class="balance">₦<span id="balance">100000</span></div>
   </div>
 
-  <!-- Main content -->
-  <div class="main">
-    <div class="header">
-      <h1>Mini TikTok</h1>
-      <input type="text" placeholder="Search...">
-    </div>
-
-    <!-- Video feed -->
-    <div class="video-card">
-      <video src="https://www.w3schools.com/html/mov_bbb.mp4" controls autoplay loop muted></video>
-      <div class="video-info">
-        <h4>@username</h4>
-        <p>Check out this amazing video! 🎵 #fun #dance</p>
-      </div>
-      <div class="video-actions">
-        <div>❤️ 123</div>
-        <div>💬 45</div>
-        <div>🔗 10</div>
-      </div>
-    </div>
-
-    <div class="video-card">
-      <video src="https://www.w3schools.com/html/movie.mp4" controls autoplay loop muted></video>
-      <div class="video-info">
-        <h4>@anotheruser</h4>
-        <p>Another cool clip! 😎 #trending</p>
-      </div>
-      <div class="video-actions">
-        <div>❤️ 98</div>
-        <div>💬 12</div>
-        <div>🔗 5</div>
-      </div>
-    </div>
+  <!-- Deposit -->
+  <div class="card">
+    <h3>Deposit Money</h3>
+    <p><strong>Bank Name:</strong> MoMo PSB</p>
+    <p><strong>Account Name:</strong> Oluwafunmi Adeyeye</p>
+    <p><strong>Account Number:</strong> 7073559922</p>
+    <small>After payment, click the button below.</small>
+    <button onclick="alert('Payment noted. Admin will credit manually.')">I’ve Paid</button>
   </div>
 
-  <!-- Footer for mobile -->
-  <div class="footer">
-    <a href="#">🏠</a>
-    <a href="#">🔍</a>
-    <a href="#">💌</a>
-    <a href="#">👤</a>
+  <!-- Withdraw -->
+  <div class="card">
+    <h3>Withdraw</h3>
+    <input placeholder="Amount">
+    <input placeholder="Your Bank Account">
+    <button class="secondary" onclick="alert('Withdrawal request sent')">Request Withdraw</button>
   </div>
+
+  <!-- Upload -->
+  <div class="card">
+    <h3>Upload Video / Music / Image</h3>
+    <input type="file" multiple>
+    <button class="secondary">Upload</button>
+  </div>
+
+  <!-- Feed -->
+  <div class="card feed">
+    <h3>Entertainment Feed</h3>
+    <video controls loop muted src="https://www.w3schools.com/html/mov_bbb.mp4"></video>
+    <p>@user Amazing video 🔥</p>
+  </div>
+
+  <!-- Chat -->
+  <div class="card">
+    <h3>Community Chat</h3>
+    <div class="chat-box" id="chatBox"></div>
+    <input id="chatInput" placeholder="Type message">
+    <button onclick="sendMsg()">Send</button>
+  </div>
+
+  <!-- Games -->
+  <div class="card">
+    <h3>Game Zone (Demo)</h3>
+    <p>Bet ₦1,000 and win ₦2,000</p>
+    <button onclick="playGame()">Play Game</button>
+  </div>
+
+  <!-- Marketplace -->
+  <div class="card">
+    <h3>Buy & Sell</h3>
+    <div class="item">Music Beat – ₦5,000 <button onclick="buy()">Buy</button></div>
+    <div class="item">Video Ad – ₦10,000 <button onclick="buy()">Buy</button></div>
+  </div>
+
+</div>
+</div>
+
+<footer id="footer" class="hidden">
+  <button onclick="showDash()">Home</button>
+  <button onclick="alert('Upload')">Upload</button>
+  <button onclick="alert('Wallet')">Wallet</button>
+  <button onclick="logout()">Logout</button>
+</footer>
+
+<script>
+let user=null
+let balance=100000
+
+function show(id){
+  document.querySelectorAll('.card').forEach(c=>c.classList.add('hidden'))
+  document.getElementById(id).classList.remove('hidden')
+}
+
+function register(){
+  localStorage.setItem('user',rUser.value)
+  localStorage.setItem('pass',rPass.value)
+  login()
+}
+
+function login(){
+  if(lUser.value===localStorage.getItem('user') &&
+     lPass.value===localStorage.getItem('pass')){
+    user=lUser.value
+    document.getElementById('dashboard').classList.remove('hidden')
+    document.getElementById('footer').classList.remove('hidden')
+    document.getElementById('topNav').innerHTML=`Welcome, ${user}`
+  }else alert('Wrong login')
+}
+
+function logout(){location.reload()}
+
+function sendMsg(){
+  let box=document.getElementById('chatBox')
+  box.innerHTML+=`<div class="chat-msg"><b>${user}:</b> ${chatInput.value}</div>`
+  chatInput.value=''
+  box.scrollTop=box.scrollHeight
+}
+
+function playGame(){
+  balance+=1000
+  document.getElementById('balance').innerText=balance
+  alert('You won ₦1,000!')
+}
+
+function buy(){
+  balance-=1000
+  document.getElementById('balance').innerText=balance
+  alert('Purchase successful')
+}
+</script>
+
 </body>
 </html>
