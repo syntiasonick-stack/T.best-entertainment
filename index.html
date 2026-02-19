@@ -4,47 +4,33 @@
 <meta charset="UTF-8">
 <title>T.Best Entertainment</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <style>
 *{box-sizing:border-box;margin:0;padding:0;font-family:Arial,Helvetica,sans-serif}
 body{background:#000;color:#fff}
 .hidden{display:none}
-
-/* Layout */
-header{background:#111;padding:10px 15px;display:flex;justify-content:space-between;align-items:center}
+header{background:#111;padding:10px 15px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100}
 header h1{font-size:20px;color:#ff0050}
 nav button{background:none;border:none;color:#fff;margin-left:10px;font-size:14px;cursor:pointer}
-
 .container{padding:15px;max-width:900px;margin:auto}
 .card{background:#151515;border-radius:10px;padding:15px;margin-bottom:15px}
-input,button,textarea,select{
-  width:100%;padding:10px;margin-top:8px;border-radius:6px;border:none
-}
+input,button,textarea,select{width:100%;padding:10px;margin-top:8px;border-radius:6px;border:none}
 button{background:#ff0050;color:#fff;font-weight:bold;cursor:pointer}
 button.secondary{background:#333}
-
 .feed video,img,audio{width:100%;border-radius:10px;margin-top:10px}
-
-/* Wallet */
 .wallet{display:flex;justify-content:space-between;align-items:center}
 .balance{font-size:18px;font-weight:bold;color:#00ff99}
-
-/* Chat */
 .chat-box{height:200px;overflow-y:auto;background:#000;border:1px solid #333;padding:10px}
 .chat-msg{margin-bottom:6px;font-size:14px}
-
-/* Marketplace */
 .item{border-bottom:1px solid #333;padding:8px 0}
-
-/* Footer nav */
-footer{
-  position:fixed;bottom:0;left:0;width:100%;
-  background:#111;display:flex;justify-content:space-around;padding:8px 0
-}
+footer{position:fixed;bottom:0;left:0;width:100%;background:#111;display:flex;justify-content:space-around;padding:8px 0}
 footer button{background:none;border:none;color:#fff;font-size:12px}
+.trending{display:flex;overflow-x:auto;gap:10px;margin-bottom:15px}
+.trending video{min-width:200px;height:120px;flex-shrink:0;border-radius:10px}
+#spinWheel{display:flex;flex-direction:column;align-items:center}
+#spinBtn{margin-top:10px}
+.leaderboard div{border-bottom:1px solid #333;padding:5px 0}
 </style>
 </head>
-
 <body>
 
 <header>
@@ -78,6 +64,63 @@ footer button{background:none;border:none;color:#fff;font-size:12px}
   <div class="card wallet">
     <div>Wallet Balance</div>
     <div class="balance">₦<span id="balance">100000</span></div>
+  </div>
+
+  <!-- Stories / Status -->
+  <div class="card">
+    <h3>✨ Stories</h3>
+    <div style="display:flex;overflow-x:auto;gap:10px" id="storyBar"></div>
+    <input type="file" id="storyFile" accept="image/*,video/*">
+    <button style="margin-top:10px" onclick="uploadStory()">Upload Your Story</button>
+  </div>
+
+  <!-- Trending Videos -->
+  <div class="card">
+    <h3>🔥 Trending Videos</h3>
+    <div class="trending" id="trendingVideos">
+      <video src="https://www.w3schools.com/html/mov_bbb.mp4" controls muted loop></video>
+      <video src="https://www.w3schools.com/html/movie.mp4" controls muted loop></video>
+      <video src="https://www.w3schools.com/html/mov_bbb.mp4" controls muted loop></video>
+    </div>
+  </div>
+
+  <!-- Daily Reward / Spin -->
+  <div class="card" id="spinWheel">
+    <h3>🎁 Daily Reward</h3>
+    <p>Click the spin to get free coins (demo wallet)</p>
+    <button id="spinBtn" onclick="spinDaily()">Spin</button>
+  </div>
+
+  <!-- Leaderboard -->
+  <div class="card leaderboard">
+    <h3>🏆 Game Leaderboard</h3>
+    <div id="leaderboardList">
+      <div>1. PlayerOne - ₦150,000</div>
+      <div>2. PlayerTwo - ₦130,000</div>
+      <div>3. PlayerThree - ₦120,000</div>
+    </div>
+  </div>
+
+  <!-- Top Creators -->
+  <div class="card">
+    <h3>⭐ Top Creators</h3>
+    <div id="creators">
+      <div>@user1 <button onclick="follow('user1')">Follow</button></div>
+      <div>@user2 <button onclick="follow('user2')">Follow</button></div>
+      <div>@user3 <button onclick="follow('user3')">Follow</button></div>
+    </div>
+  </div>
+
+  <!-- Quick Poll -->
+  <div class="card">
+    <h3>📊 Poll: Favorite Genre?</h3>
+    <select id="pollSelect">
+      <option value="music">Music</option>
+      <option value="dance">Dance</option>
+      <option value="comedy">Comedy</option>
+    </select>
+    <button onclick="votePoll()">Vote</button>
+    <p id="pollResult"></p>
   </div>
 
   <!-- Deposit -->
@@ -122,9 +165,11 @@ footer button{background:none;border:none;color:#fff;font-size:12px}
 
   <!-- Games -->
   <div class="card">
-    <h3>Game Zone (Demo)</h3>
-    <p>Bet ₦1,000 and win ₦2,000</p>
+    <h3>🎲 Game Zone (Demo)</h3>
+    <p>Enter bet amount:</p>
+    <input type="number" id="betAmount" placeholder="₦1,000 minimum" min="1000">
     <button onclick="playGame()">Play Game</button>
+    <p id="gameResult"></p>
   </div>
 
   <!-- Marketplace -->
@@ -135,8 +180,10 @@ footer button{background:none;border:none;color:#fff;font-size:12px}
   </div>
 
 </div>
+
 </div>
 
+<!-- Footer -->
 <footer id="footer" class="hidden">
   <button onclick="showDash()">Home</button>
   <button onclick="alert('Upload')">Upload</button>
@@ -144,52 +191,164 @@ footer button{background:none;border:none;color:#fff;font-size:12px}
   <button onclick="logout()">Logout</button>
 </footer>
 
+<!-- Story Viewer Modal -->
+<div id="storyModal" class="hidden" style="position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.95);display:flex;justify-content:center;align-items:center;flex-direction:column;z-index:200">
+  <span style="position:absolute;top:10px;right:20px;font-size:24px;cursor:pointer" onclick="closeStory()">✖</span>
+  <div id="storyContent" style="text-align:center"></div>
+  <button onclick="nextStory()" style="margin-top:10px">Next ▶</button>
+</div>
+
+<!-- Notification container -->
+<div id="notificationContainer" style="position:fixed;top:10px;right:10px;z-index:300;"></div>
+
 <script>
-let user=null
-let balance=100000
+// ------------------------
+// ADMIN CREDENTIALS
+// ------------------------
+const adminCredentials = { username:"adminOmotayo", password:"SuperSecret123" }
 
-function show(id){
-  document.querySelectorAll('.card').forEach(c=>c.classList.add('hidden'))
-  document.getElementById(id).classList.remove('hidden')
-}
+// ------------------------
+// USER / WALLET
+// ------------------------
+let user=null, balance=100000, dailyClaimed=false, followedUsers=[]
+let stories=JSON.parse(localStorage.getItem('stories')) || [
+  {user:'@user1', type:'image', src:'https://via.placeholder.com/400x700.png?text=Story1'},
+  {user:'@user2', type:'image', src:'https://via.placeholder.com/400x700.png?text=Story2'},
+  {user:'@user3', type:'video', src:'https://www.w3schools.com/html/mov_bbb.mp4'}
+]
+let currentStory=0
 
-function register(){
-  localStorage.setItem('user',rUser.value)
-  localStorage.setItem('pass',rPass.value)
-  login()
-}
+// DEMO USERS
+let demoUsers=[
+  {user:'@user1', balance:130000},
+  {user:'@user2', balance:120000},
+  {user:'@user3', balance:110000}
+]
 
+// ------------------------
+// AUTH
+// ------------------------
+function show(id){document.querySelectorAll('.card').forEach(c=>c.classList.add('hidden'));document.getElementById(id).classList.remove('hidden')}
+function register(){localStorage.setItem('user',rUser.value);localStorage.setItem('pass',rPass.value);login()}
 function login(){
-  if(lUser.value===localStorage.getItem('user') &&
-     lPass.value===localStorage.getItem('pass')){
-    user=lUser.value
+  const lUserVal=lUser.value
+  const lPassVal=lPass.value
+
+  // Admin login
+  if(lUserVal === adminCredentials.username && lPassVal === adminCredentials.password){
+    alert("Admin logged in!")
+    user = "Admin"
+    document.getElementById('dashboard').classList.remove('hidden')
+    document.getElementById('footer').classList.remove('hidden')
+    document.getElementById('topNav').innerHTML=`Admin Panel - ${user}`
+    document.getElementById('balance').innerText="∞"
+    renderStoryBar()
+    return
+  }
+
+  // Normal user login
+  if(lUserVal===localStorage.getItem('user') && lPassVal===localStorage.getItem('pass')){
+    user=lUserVal
     document.getElementById('dashboard').classList.remove('hidden')
     document.getElementById('footer').classList.remove('hidden')
     document.getElementById('topNav').innerHTML=`Welcome, ${user}`
-  }else alert('Wrong login')
+    document.getElementById('balance').innerText=balance
+    renderStoryBar()
+  } else {
+    alert('Wrong login')
+  }
 }
 
+// ------------------------
+// LOGOUT
+// ------------------------
 function logout(){location.reload()}
 
-function sendMsg(){
-  let box=document.getElementById('chatBox')
-  box.innerHTML+=`<div class="chat-msg"><b>${user}:</b> ${chatInput.value}</div>`
-  chatInput.value=''
-  box.scrollTop=box.scrollHeight
-}
+// ------------------------
+// CHAT
+// ------------------------
+function sendMsg(){let box=document.getElementById('chatBox');box.innerHTML+=`<div class="chat-msg"><b>${user}:</b> ${chatInput.value}</div>`;chatInput.value='';box.scrollTop=box.scrollHeight}
 
+// ------------------------
+// POLL
+// ------------------------
+function votePoll(){document.getElementById('pollResult').innerText='You voted for '+document.getElementById('pollSelect').value}
+
+// ------------------------
+// FOLLOW
+// ------------------------
+function follow(u){if(!followedUsers.includes(u)){followedUsers.push(u);alert('You followed '+u);showNotification(`@${user} followed ${u}!`)} else alert('Already following '+u)}
+
+// ------------------------
+// DAILY SPIN
+// ------------------------
+function spinDaily(){if(dailyClaimed){alert('Already claimed today!');return}let reward=Math.floor(Math.random()*5000)+500;balance+=reward;document.getElementById('balance').innerText=balance;alert('You got ₦'+reward+' coins!');showNotification(`🎁 @${user} claimed ${reward} coins!`);dailyClaimed=true}
+
+// ------------------------
+// MARKETPLACE
+// ------------------------
+function buy(){if(balance>=1000){balance-=1000;document.getElementById('balance').innerText=balance;alert('Purchase successful')} else alert('Insufficient funds')}
+
+// ------------------------
+// GAME ZONE
+// ------------------------
 function playGame(){
-  balance+=1000
+  let bet=parseInt(document.getElementById('betAmount').value)
+  if(isNaN(bet)||bet<1000){alert('Enter at least ₦1,000');return}
+  if(bet>balance){alert('Insufficient funds');return}
+  const outcome=Math.floor(Math.random()*10)
+  let resultText='', notifText=''
+  if(outcome<=4){balance-=bet;resultText=`You lost ₦${bet}!`;notifText=`@${user} lost ₦${bet} in Game Zone.`}
+  else if(outcome<=8){balance+=bet;resultText=`You won ₦${bet}!`;notifText=`🎉 @${user} won ₦${bet} in Game Zone!`}
+  else{balance+=bet*5;resultText=`🎉 JACKPOT! You won ₦${bet*5}!`;notifText=`🏆 JACKPOT! @${user} won ₦${bet*5}!`}
   document.getElementById('balance').innerText=balance
-  alert('You won ₦1,000!')
+  document.getElementById('gameResult').innerText=resultText
+  showNotification(notifText)
+  updateLeaderboard()
 }
 
-function buy(){
-  balance-=1000
-  document.getElementById('balance').innerText=balance
-  alert('Purchase successful')
+// ------------------------
+// STORIES
+// ------------------------
+function renderStoryBar(){
+  const bar=document.getElementById('storyBar')
+  bar.innerHTML=''
+  stories.forEach((s,i)=>{
+    let div=document.createElement('div');div.style.textAlign='center';div.style.cursor='pointer';div.onclick=()=>viewStory(i)
+    let thumb=document.createElement('img');thumb.style.width='80px';thumb.style.height='120px';thumb.style.borderRadius='10px'
+    thumb.src = s.type==='image'?s.src:'https://via.placeholder.com/80x120.png?text=Video'
+    div.appendChild(thumb)
+    let name=document.createElement('div');name.innerText=s.user;div.appendChild(name)
+    bar.appendChild(div)
+  })
 }
-</script>
+function viewStory(index){currentStory=index;showStory();document.getElementById('storyModal').classList.remove('hidden')}
+function showStory(){let story=document.createElement(stories[currentStory].type);story.style.maxWidth='400px';story.style.maxHeight='700px';story.controls=stories[currentStory].type==='video';story.autoplay=stories[currentStory].type==='video';story.src=stories[currentStory].src;document.getElementById('storyContent').innerHTML='';document.getElementById('storyContent').appendChild(story)}
+function nextStory(){currentStory++;if(currentStory>=stories.length) closeStory(); else showStory()}
+function closeStory(){document.getElementById('storyModal').classList.add('hidden')}
+function uploadStory(){
+  const fileInput=document.getElementById('storyFile');const file=fileInput.files[0]
+  if(!file) return alert('Select a file first!')
+  const reader=new FileReader()
+  reader.onload=function(e){
+    const type=file.type.startsWith('video')?'video':'image'
+    const newStory={user:user||'@guest',type:type,src:e.target.result}
+    stories.push(newStory)
+    localStorage.setItem('stories',JSON.stringify(stories))
+    renderStoryBar()
+    showNotification(`@${user} uploaded a new story!`)
+  }
+  reader.readAsDataURL(file)
+  fileInput.value=''
+}
 
-</body>
-</html>
+// ------------------------
+// NOTIFICATIONS
+// ------------------------
+function showNotification(message){
+  const container=document.getElementById('notificationContainer')
+  const notif=document.createElement('div')
+  notif.innerText=message
+  notif.style.background='#ff0050'
+  notif.style.color='#fff'
+  notif.style.padding='10px 15
